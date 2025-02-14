@@ -32,7 +32,7 @@ const LoginForm: React.FC = () => {
 
         setLoading(true);
 
-        router.push('/users/RegisterForm');
+        // router.push('/users/RegisterForm');
         try {
             const response: any = await login(email, password);
             Alert.alert('Éxito', 'Inicio de sesión exitoso.');
@@ -54,20 +54,20 @@ const LoginForm: React.FC = () => {
                 Iniciar Sesión
             </Text>
             <TextInput
-                style={[styles.input, tailwind('w-full p-3 border border-gray-300 rounded-md mb-4 my-2')]}
+                style={[styles.input, tailwind('w-full p-3 border border-gray-300 rounded-md mb-4 my-2 bg-white')]}
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
             />
             <TextInput
-                style={[styles.input, tailwind('w-full p-3 border border-gray-300 rounded-md mb-4 my-2')]}
+                style={[styles.input, tailwind('w-full p-3 border border-gray-300 rounded-md mb-4 my-2 bg-white')]}
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
             />
             <TouchableOpacity
-                style={tailwind('w-full bg-blue-500 p-3 rounded-md items-center')}
+                style={tailwind('w-full bg-blue-500 p-3 rounded-md items-center mb-4')}
                 onPress={handleLogin}
                 disabled={loading}
             >

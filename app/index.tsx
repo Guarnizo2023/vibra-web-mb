@@ -5,7 +5,8 @@ import LoginForm from './LoginForm';
 import utilities from '../tailwind.json';
 import { TailwindProvider } from 'tailwind-rn';
 
-const LoginFormPage = () => {
+const Index = () => {
+  console.log('En el index');
   return (
     <ImageBackground
       source={require('./assets/bg-2.jpeg')} // Ruta de la imagen de fondo
@@ -36,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginFormPage;
+export default Index;
