@@ -1,6 +1,7 @@
 import { useState } from 'react';
 // import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
+import { Alert } from 'react-native';
 
 const useAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -12,9 +13,10 @@ const useAuth = () => {
         if (email === 'user@test.com' && password === '123456') {
             //await SecureStore.setItemAsync('authToken', 'mock-token');
             setIsAuthenticated(true);
-            router.push('./users/RegisterForm'); // Navegación usando el router
+            router.push('./components/(tabs)/one');  // Navegación usando el router
         } else {
-            throw new Error('Credenciales inválidas');
+            Alert.alert('Error', 'Credenciales incorrectas o error en la conexión.');
+            // throw new Error('Credenciales inválidas');
         }
     };
 
