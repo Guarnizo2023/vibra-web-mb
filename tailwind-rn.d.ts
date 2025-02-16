@@ -1,4 +1,3 @@
-// tailwind-rn.d.ts
 import 'tailwind-rn';
 
 declare module 'tailwind-rn' {
@@ -13,7 +12,7 @@ declare module 'tailwind-rn' {
     }
 
     interface TailwindProvider {
-        children: React.ReactNode;
         utilities: Record<string, { style: Record<string, unknown> }>;
+        children: React.ReactNode;
     }
 }

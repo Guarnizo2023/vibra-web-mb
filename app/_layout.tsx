@@ -12,33 +12,32 @@ export default function RootLayout() {
   const { isAuthenticated, checkAuth } = useAuth();
 
   useEffect(() => {
-    console.log("en RootLayout:", isAuthenticated);
     checkAuth().then((authenticated: any) => {
       console.log("Authenticated:", authenticated);
       if (authenticated) {
-        // router.replace('/(tabs)');
+        router.replace('/components/(tabs)/one');
       } else {
-        router.push("/Index");
+        //router.push("/Index");
       }
     });
   }, []);
 
-  return (<>
-  <ImageBackground
-    source={require("./assets/bg-2.jpeg")} // Ruta de la imagen de fondo
-    style={styles.background}
-    resizeMode="cover" // Ajusta la imagen al tamaño del contenedor
-  >
+  return (
     <TailwindProvider utilities={utilities}>
-      <Slot />
+      <ImageBackground
+        source={require("./assets/bg-2.jpeg")}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <Slot />
+      </ImageBackground >
     </TailwindProvider>
-  </ImageBackground>
-  </>);
+  );
 }
 const styles = StyleSheet.create({
   background: {
-    flex: 1, // Ocupa toda la pantalla
-    width: "100%", // Ancho completo
-    height: "100%", // Altura completa
+    flex: 1,
+    width: "100%",
+    height: "100%",
   },
 });
