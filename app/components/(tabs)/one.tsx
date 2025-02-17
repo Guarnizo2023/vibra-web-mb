@@ -13,8 +13,8 @@ export default function TabOne() {
     return (
         <View style={{ flex: 1, padding: 20 }}>
             <Text style={tailwind('text-lg mb-4')}>Bienvenido al Dashboard</Text>
-            <Text>Datos mockeados: {mockDashboardData.tabOne}</Text>
-            <UploadFile />
+            {/*<Text>Datos mockeados: {mockDashboardData.tabOne}</Text>
+            <UploadFile />*/}
             <View style={{ flex: 1 }}>
                 <UserRankingList />
             </View>
