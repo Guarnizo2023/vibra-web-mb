@@ -34,7 +34,7 @@ const UserRankingList = () => {
     useEffect(() => {
         const fetchOptions = async () => {
             try {
-                const roleResponse: any = await axios.get('http://192.168.101.72:4000/users/all');
+                const roleResponse: any = await axios.get('http://localhost:4000/users/all');
                 console.log('roleResponse?.data:', roleResponse?.data);
                 setItems([...roleResponse.data,
                 {

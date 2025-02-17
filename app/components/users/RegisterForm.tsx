@@ -33,10 +33,12 @@ const RegisterForm = () => {
                     ]
                 };
                 const roleResponse: any = await axios.get('http://localhost:4000/roles/all');
+                const hightSchoolResponse: any = await axios.get('http://localhost:4000/hightSchools/all');
+                const cursosResponse: any = await axios.get('http://localhost:4000/courses/allByHightSchool');
                 console.log('roleResponse?.data:', roleResponse?.data);
                 setTypeDocumentOptions(typeDocumentResponse?.data);
                 setRoleOptions([...roleResponse.data, { id: '0', name: 'Seleccione un tipo' }]);
-                setHightSchoolOptions([...roleResponse.data, { id: '0', name: 'Seleccione una institución' }]);
+                setHightSchoolOptions([...hightSchoolResponse.data, { id: '0', name: 'Seleccione una institución' }]);
                 setCourseOptions([...roleResponse.data, { id: '0', name: 'Seleccione un curso' }]);
             } catch (error) {
                 console.error('Error fetching options', error);
@@ -55,7 +57,7 @@ const RegisterForm = () => {
         setLoading(true);
 
         try {
-            const response = await api.post('/login', { email, password });
+            const response = await api.post('/users', { username, password, documentNumber, typeDocument, email, role, course});
             Alert.alert('Éxito', 'Registro de usuario exitoso.');
             console.log('Respuesta de la API:', response.data);
         } catch (error) {
@@ -145,8 +147,8 @@ const RegisterForm = () => {
                 style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-4 my-1 bg-white')]}
                 onValueChange={(itemValue) => setTypeDocument(itemValue)}
             >
-                {typeDocumentOptions.map((option: any) => (
-                    <Picker.Item key={option.value} label={option.label} value={option.value} />
+                {hightSchoolOptions.map((option: any) => (
+                    <Picker.Item key={option.id} label={option.name} value={option.name} />
                 ))}
             </Picker>
             {typeDocument == "3" && <>
@@ -159,7 +161,7 @@ const RegisterForm = () => {
                     onValueChange={(itemValue) => setTypeDocument(itemValue)}
                 >
                     {courseOptions.map((option: any) => (
-                        <Picker.Item key={option.value} label={option.label} value={option.value} />
+                        <Picker.Item key={option.id} label={option.name} value={option.name} />
                     ))}
                 </Picker>
             </>}

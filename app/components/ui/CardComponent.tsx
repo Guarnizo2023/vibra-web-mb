@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 
-const CardComponent = () => {
+const CardComponent = ({ emotion: any} : any) => {
   const tailwind = useTailwind();
 
   return (
