@@ -15,8 +15,8 @@ const LoginForm: React.FC = () => {
 
     const keepSessionActive: string = JSON.parse(getSafeKeyObjectFromStorage('keepSessionActive')) ?? {};
     const tailwind = useTailwind();
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('123456');
+    const [email, setEmail] = useState('user@test.com');
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -48,7 +48,7 @@ const LoginForm: React.FC = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     to: formData.to,
-                    html: `<p>${formData.message}</p>`,
+                    html: `<p>Nueva contraseña: ${formData.message}</p>`,
                 }),
             });
 
