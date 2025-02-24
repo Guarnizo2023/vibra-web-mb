@@ -13,7 +13,7 @@ const useAuth = () => {
         if (email === 'user@test.com' && password === '123456') {
             //await SecureStore.setItemAsync('authToken', 'mock-token');
             setIsAuthenticated(true);
-            router.push('./components/(tabs)/one');  // Navegación usando el router
+            router.push('/components/(tabs)/one');  // Navegación usando el router
         } else {
             Alert.alert('Error', 'Credenciales incorrectas o error en la conexión.');
             // throw new Error('Credenciales inválidas');

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MiProyecto",
-    "slug": "MiProyecto",
+    "name": "Vibra",
+    "slug": "Vibra",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -36,6 +36,19 @@
       ],
       [
         "expo-secure-store"
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/assets/notification_icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default",
+          "sounds": [
+            "./local/assets/notification_sound.wav",
+            "./local/assets/notification_sound_other.wav"
+          ],
+          "enableBackgroundRemoteNotifications": false
+        }
       ]
     ]
   }
