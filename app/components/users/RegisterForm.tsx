@@ -88,7 +88,7 @@ const RegisterForm = () => {
             if (response) {
                 Alert.alert('Éxito', 'Registro de usuario exitoso.');
                 console.log('Respuesta de la API:', response.data);
-                router.push('/components/login/LoginForm');
+                router.push('/');
             }
         } catch (error) {
             Alert.alert('Error', 'Campos incompletos');
