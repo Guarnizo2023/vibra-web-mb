@@ -5,6 +5,12 @@ import { useTailwind } from 'tailwind-rn';
 import useAuth from '../../hooks/useAuth';
 import { getSafeKeyObjectFromStorage } from '../../../utils/safe-token-storage';
 
+interface EmailFormData {
+    to: string;
+    subject: string;
+    message: string;
+}
+
 const LoginForm: React.FC = () => {
 
     const keepSessionActive: string = JSON.parse(getSafeKeyObjectFromStorage('keepSessionActive')) ?? {};
@@ -12,10 +18,14 @@ const LoginForm: React.FC = () => {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
-    const [recoveryEmail, setRecoveryEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
+    const [formData, setFormData] = useState<EmailFormData>({
+        to: 'yovanysuarezsilva@gmail.com',
+        subject: 'Prueba desde React Native',
+        message: '¡Este es un correo de prueba! 🚀',
+    });
 
     const { login } = useAuth();
 
@@ -31,16 +41,30 @@ const LoginForm: React.FC = () => {
         setIsEnabled(Boolean(keepSessionActive));
     }, [keepSessionActive])
 
-    const handlePasswordRecovery = () => {
-        // Handle password recovery logic
-        setModalVisible(false);
+    const handlePasswordRecovery = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/email/send-email-recovery-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: formData.to,
+                    html: `<p>${formData.message}</p>`,
+                }),
+            });
+
+            const result = await response.json();
+            setModalVisible(false);
+            Alert.alert(result.message || result.error);
+        } catch (error) {
+            Alert.alert('Error de conexión');
+        }
     };
 
     const handleNext = async () => {
         if (!isAuthenticated) {
             Alert.alert('Error', 'Por favor, inicie una sesión');
         }
-        router.push('../components/one')
+        router.push('/components/one')
 
     };
 
@@ -68,7 +92,7 @@ const LoginForm: React.FC = () => {
     };
 
     const handleRegister = async () => {
-        router.push('../components/users/RegisterForm'); // Navegación usando el router
+        router.push('/components/users/RegisterForm'); // Navegación usando el router
     }
 
     return (
@@ -144,13 +168,28 @@ const LoginForm: React.FC = () => {
                         <TextInput
                             style={[styles.input, tailwind('w-full p-3 border border-gray-300 rounded-md mb-4 my-2')]}
                             placeholder="Correo electrónico"
-                            value={recoveryEmail}
-                            onChangeText={setRecoveryEmail}
+                            value={formData.to}
+                            onChangeText={(text) => setFormData({ ...formData, to: text })}
                         />
-
                         <View style={tailwind('flex-row justify-between items-center mt-4 w-full')}>
-                            <Button title="Recuperar" onPress={handlePasswordRecovery} />
-                            <Button color={"#767577"} title="Cancelar" onPress={() => setModalVisible(false)} />
+                            <TouchableOpacity
+                                style={tailwind('bg-gray-500 p-3 rounded-md items-center')}
+                                onPress={() => setModalVisible(false)}
+                                disabled={loading}
+                            >
+                                <Text style={tailwind('text-white font-bold text-center')}>
+                                    {loading ? 'Cargando...' : 'Cancelar'}
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={tailwind('bg-red-500 p-3 rounded-md items-center')}
+                                onPress={handlePasswordRecovery}
+                                disabled={loading}
+                            >
+                                <Text style={tailwind('text-white font-bold text-center')}>
+                                    {loading ? 'Cargando...' : 'Recuperar'}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -179,7 +218,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
     },
     link: {
-        color: 'blue',
+        color: 'white',
         textAlign: 'center',
         marginTop: 12,
     },

@@ -1,9 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ImageBackground, Platform, StyleSheet, Text, View } from 'react-native';
 import LoginForm from './components/login/LoginForm';
-import utilities from '../tailwind.json';
-import { TailwindProvider } from 'tailwind-rn';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import { SchedulableTriggerInputTypes } from 'expo-notifications';
+import Constants from 'expo-constants';
+import LocalStorageComponent from './components/ui/LocalStorageComponent';
 //import messaging from '@react-native-firebase/messaging';
 
 // Solicitar permisos para notificaciones (iOS)
@@ -21,22 +24,145 @@ messaging().setBackgroundMessageHandler(async (remoteMessage: any) => {
   console.log('Notificación en segundo plano:', remoteMessage);
 });*/
 
-const Index = () => {
-  return (
-    <TailwindProvider utilities={utilities}>
-      <ImageBackground
-        source={require('./assets/bg-2.jpeg')} // Ruta de la imagen de fondo
-        style={styles.background}
-        resizeMode="cover" // Ajusta la imagen al tamaño del contenedor
-      >
+// First, set the handler that will cause the notification
+// to show the alert
+if (Platform.OS !== 'web') {
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    }),
+  });
 
-        <View style={styles.container}>
-          <LoginForm />
-          <Text>Desarrollado por equipo Vibra</Text>
-          <StatusBar style="auto" />
+  // Second, call scheduleNotificationAsync()
+  Notifications.scheduleNotificationAsync({
+    content: {
+      title: 'Look at that notification',
+      body: "I'm so proud of myself!",
+    },
+    trigger: null,
+  });
+}
+
+const Index: React.FC = () => {
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [channels, setChannels] = useState<Notifications.NotificationChannel[]>([]);
+  const [notification, setNotification] = useState<Notifications.Notification | undefined>(
+    undefined
+  );
+  const notificationListener = useRef<Notifications.EventSubscription>();
+  const responseListener = useRef<Notifications.EventSubscription>();
+
+  useEffect(() => {
+    if (Platform.OS !== 'web') {
+      registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
+
+      if (Platform.OS === 'android') {
+        Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
+      }
+      notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+        setNotification(notification);
+      });
+
+      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        console.log(response);
+      });
+
+      return () => {
+        notificationListener.current &&
+          Notifications.removeNotificationSubscription(notificationListener.current);
+        responseListener.current &&
+          Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }
+  }, []);
+
+  async function schedulePushNotification() {
+    if (Platform.OS !== 'web') {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "You've got mail! 📬",
+          body: 'Here is the notification body',
+          data: { data: 'goes here', test: { test1: 'more data' } },
+        },
+        trigger: {
+          type: SchedulableTriggerInputTypes.TIME_INTERVAL,
+          seconds: 2,
+        },
+      });
+    }
+  }
+
+  async function registerForPushNotificationsAsync() {
+    if (Platform.OS === 'web') {
+      return null;
+    }
+    let token;
+
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('myNotificationChannel', {
+        name: 'A channel is needed for the permissions prompt to appear',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      // Learn more about projectId:
+      // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+      // EAS projectId is used here.
+      try {
+        const projectId =
+          Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+        if (!projectId) {
+          throw new Error('Project ID not found');
+        }
+        token = (
+          await Notifications.getExpoPushTokenAsync({
+            projectId,
+          })
+        ).data;
+        console.log(token);
+      } catch (e) {
+        token = `${e}`;
+      }
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+
+    return token;
+  }
+
+  return (
+    <ImageBackground
+      source={require('./assets/bg-2.jpeg')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.container}>
+        <LoginForm />
+        <View style={{ padding: 20, marginTop: 120 }}>
+          <Text style={{ fontSize: 20, marginBottom: 1 }}>Almacenamiento en local</Text>
+          <LocalStorageComponent key="nombreUsuario" label="Nombre de Usuario" defaultValue="Invitado" />
+          {/*<LocalStorageComponent key="ultimoAcceso" label="Último Acceso" defaultValue="ultimoAcceso" />
+          <LocalStorageComponent key="theme" label="Tema" defaultValue="light" />*/}
         </View>
-      </ImageBackground>
-    </TailwindProvider>
+        <Text>Desarrollado por equipo Vibra</Text>
+        <StatusBar style="auto" />
+      </View>
+    </ImageBackground>
   );
 }
 
