@@ -7,6 +7,7 @@ import * as Notifications from 'expo-notifications';
 import { SchedulableTriggerInputTypes } from 'expo-notifications';
 import Constants from 'expo-constants';
 import LocalStorageComponent from './components/ui/LocalStorageComponent';
+import { FlatListComponente } from './components/ui/FlatList';
 //import messaging from '@react-native-firebase/messaging';
 
 // Solicitar permisos para notificaciones (iOS)
@@ -38,8 +39,8 @@ if (Platform.OS !== 'web') {
   // Second, call scheduleNotificationAsync()
   Notifications.scheduleNotificationAsync({
     content: {
-      title: 'Look at that notification',
-      body: "I'm so proud of myself!",
+      title: 'Tienes una nueva notificación de Vibra',
+      body: "Se ha actualizado el ranking del día!",
     },
     trigger: null,
   });
@@ -61,6 +62,7 @@ const Index: React.FC = () => {
       if (Platform.OS === 'android') {
         Notifications.getNotificationChannelsAsync().then(value => setChannels(value ?? []));
       }
+
       notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
         setNotification(notification);
       });
@@ -139,7 +141,7 @@ const Index: React.FC = () => {
         token = `${e}`;
       }
     } else {
-      alert('Must use physical device for Push Notifications');
+      alert('Debe utilizar un dispositivo físico para las notificaciones push');
     }
 
     return token;
@@ -154,12 +156,12 @@ const Index: React.FC = () => {
       <View style={styles.container}>
         <LoginForm />
         <View style={{ padding: 20, marginTop: 120 }}>
-          <Text style={{ fontSize: 20, marginBottom: 1 }}>Almacenamiento en local</Text>
+          {/*<Text style={{ fontSize: 20, marginBottom: 1 }}>Almacenamiento en local</Text>
           <LocalStorageComponent key="nombreUsuario" label="Nombre de Usuario" defaultValue="Invitado" />
-          {/*<LocalStorageComponent key="ultimoAcceso" label="Último Acceso" defaultValue="ultimoAcceso" />
+          <LocalStorageComponent key="ultimoAcceso" label="Último Acceso" defaultValue="ultimoAcceso" />
           <LocalStorageComponent key="theme" label="Tema" defaultValue="light" />*/}
         </View>
-        <Text>Desarrollado por equipo Vibra</Text>
+        <Text style={{ fontSize: 12, color: '#FFFFFF' }}>Desarrollado por equipo Vibra</Text>
         <StatusBar style="auto" />
       </View>
     </ImageBackground>
