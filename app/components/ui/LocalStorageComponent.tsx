@@ -63,7 +63,7 @@ const LocalStorageComponent: React.FC<Props> = ({ key, defaultValue = '', label 
             <TextInput
                 style={styles.input}
                 value={value}
-                onChangeText={saveValue} // Guarda automáticamente al escribir
+                onChangeText={saveValue}
                 placeholder={`Ingrese el valor para ${label}`}
             />
             <Button title="Borrar" onPress={clearValue} />

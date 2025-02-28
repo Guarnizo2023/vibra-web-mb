@@ -1,16 +1,18 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Image, ScrollView, Text, TextStyle, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useTailwind } from 'tailwind-rn';
 import socket from '../../../socket';
 import { FontAwesome5 } from "@expo/vector-icons";
+import config from '../../../config/env.json';
 
+const apiBaseUrl = config.development.apiBaseUrl;
 
 const UserRankingList = () => {
     const tailwind = useTailwind();
-    const [selectedUser, setSelectedUser] = useState<any>(null);
-    const [isModalVisible, setModalVisible] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<any>({});
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [items, setItems] = useState<any>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -27,7 +29,6 @@ const UserRankingList = () => {
         // Enviar un evento al backend
         socket.emit('clientEvent', 'Hola desde el cliente');
 
-        // Limpiar la suscripción al desmontar el componente
         return () => {
             socket.off('customEvent');
         };
@@ -36,7 +37,7 @@ const UserRankingList = () => {
     useEffect(() => {
         const fetchOptions = async () => {
             try {
-                const roleResponse: any = await axios.get('http://localhost:4000/users/all');
+                const roleResponse: any = await axios.get(`${apiBaseUrl}/users/all`);
                 console.log('roleResponse?.data:', roleResponse?.data);
                 setItems([...roleResponse.data,
                 {
@@ -48,7 +49,7 @@ const UserRankingList = () => {
                     role: {
                         name: 'Estudiante'
                     },
-                    avatar: 'https://via.placeholder.com/150', // URL de la imagen del avatar
+                    avatar: '../../assets/avatars/06.jpg', // URL de la imagen del avatar
                     course: {
                         name: 'Matemáticas',
                         hightSchool: {
@@ -83,13 +84,14 @@ const UserRankingList = () => {
         fetchOptions();
     }, [message]);
 
-    const handleUserPress = (user: any) => {
+    const handleUserPress = (user: any): void => {
+        console.log('user: ', user.username);
         setSelectedUser(user);
-        setModalVisible(true);
+        setIsModalVisible(true);
     };
 
     const closeModal = () => {
-        setModalVisible(false);
+        setIsModalVisible(false);
     };
 
     if (loading) {
@@ -108,7 +110,7 @@ const UserRankingList = () => {
         );
     }
 
-    return (
+    return (<>
         <View style={tailwind('flex-1 h-full p-2 bg-gray-100')}>
             <ScrollView>
                 {items.map((user: any, index: number) => (
@@ -139,90 +141,92 @@ const UserRankingList = () => {
                     onPress={() => socket.emit('clientEvent', 'Nuevo mensaje desde el cliente')}
                 />
             </View>*/}
-            {/* Modal para mostrar la información completa del usuario */}
-            <Modal isVisible={isModalVisible} onBackdropPress={closeModal}>
-                <View style={tailwind('bg-white p-2 rounded-lg w-full')}>
-                    {selectedUser && (
-                        <>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                                <Text style={tailwind('text-xl font-bold mb-4 text-gray-800 mt-6')}>
-                                    Información del Usuario
-                                </Text>
-                                <Image
-                                    source={require('../../assets/avatars/03.jpg')}
-                                    style={tailwind('w-10 h-10 rounded-full')}
-                                />
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
-                                <Text style={tailwind('text-sm text-gray-800 mt-4')}>
-                                    Nombre:
-                                </Text>
-                                <Text style={tailwind('text-sm font-bold text-gray-800')}>
-                                    {selectedUser.username}
-                                </Text>
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                                <Text >Rank: {rank}</Text>
-                                <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                                    {[...Array(5)].map((_, index) => (
-                                        <FontAwesome5
-                                            key={index + 1}
-                                            name="star"
-                                            solid
-                                            style={{ color: index < 3 ? "#ffd700" : "#929292", marginLeft: 5 }}
-                                        />
-                                    ))}
-                                </View>
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={tailwind('text-sm text-gray-600')}>
-                                    Documento:
-                                </Text>
-                                <Text style={tailwind('text-sm font-bold text-gray-600')}>
-                                    {selectedUser.typeDocument} {selectedUser.documentNumber}
-                                </Text>
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={tailwind('text-sm text-gray-600')}>
-                                    Email:
-                                </Text>
-                                <Text style={tailwind('text-sm font-bold text-gray-600')}>
-                                    {selectedUser.email}
-                                </Text>
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={tailwind('text-sm text-gray-600')}>
-                                    Rol:
-                                </Text>
-                                <Text style={tailwind('text-sm font-bold text-gray-600')}>
-                                    {selectedUser.role?.name}
-                                </Text>
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={tailwind('text-sm font-bold text-gray-600')}>
-                                    Sesión Activa: {selectedUser.keepSessionActive ? 'Sí' : 'No'}
-                                </Text>
-                            </View>
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={tailwind('text-sm text-gray-600')}>
-                                    Curso:
-                                </Text>
-                                <Text style={tailwind('text-sm font-bold text-gray-600')}>
-                                    {selectedUser.course?.name} - {selectedUser.course?.hightSchool?.name}
-                                </Text>
-                            </View>
-                            <TouchableOpacity
-                                onPress={closeModal}
-                                style={tailwind('mt-4 bg-blue-500 p-3 rounded-lg items-center')}
-                            >
-                                <Text style={tailwind('text-white font-bold')}>Cerrar</Text>
-                            </TouchableOpacity>
-                        </>
-                    )}
-                </View>
-            </Modal>
         </View>
-    );
+        <Modal isVisible={isModalVisible} onBackdropPress={closeModal}
+            useNativeDriver={true}
+            animationIn="slideInUp"
+            animationOut="slideOutDown">
+            <View style={[{ height: 440 }, tailwind('bg-white p-2 rounded-lg w-full')]}>
+                {(
+                    <>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                            <Text style={tailwind('text-xl font-bold mb-4 text-gray-800 mt-6')}>
+                                Información del Usuario {selectedUser?.username}
+                            </Text>
+                            <Image
+                                source={require('../../assets/avatars/03.jpg')}
+                                style={tailwind('w-10 h-10 rounded-full')}
+                            />
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 30 }}>
+                            <Text style={tailwind('text-sm text-gray-800 mt-4')}>
+                                Nombre:
+                            </Text>
+                            <Text style={tailwind('text-sm font-bold text-gray-800')}>
+                                {selectedUser.username}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                            <Text >Rank: {rank}</Text>
+                            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                                {[...Array(5)].map((_, index) => (
+                                    <FontAwesome5
+                                        key={index + 1}
+                                        name="star"
+                                        solid
+                                        style={{ color: index < 3 ? "#ffd700" : "#929292", marginLeft: 5 }}
+                                    />
+                                ))}
+                            </View>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={tailwind('text-sm text-gray-600')}>
+                                Documento:
+                            </Text>
+                            <Text style={tailwind('text-sm font-bold text-gray-600')}>
+                                {selectedUser.typeDocument} {selectedUser.documentNumber}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={tailwind('text-sm text-gray-600')}>
+                                Email:
+                            </Text>
+                            <Text style={tailwind('text-sm font-bold text-gray-600')}>
+                                {selectedUser.email}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={tailwind('text-sm text-gray-600')}>
+                                Rol:
+                            </Text>
+                            <Text style={tailwind('text-sm font-bold text-gray-600')}>
+                                {selectedUser.role?.name}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={tailwind('text-sm font-bold text-gray-600')}>
+                                Sesión Activa: {selectedUser.keepSessionActive ? 'Sí' : 'No'}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text style={tailwind('text-sm text-gray-600')}>
+                                Curso:
+                            </Text>
+                            <Text style={tailwind('text-sm font-bold text-gray-600')}>
+                                {selectedUser.course?.name} - {selectedUser.course?.hightSchool?.name}
+                            </Text>
+                        </View>
+                        <TouchableOpacity
+                            onPress={closeModal}
+                            style={tailwind('mt-4 bg-blue-500 p-3 rounded-lg items-center')}
+                        >
+                            <Text style={tailwind('text-white font-bold')}>Cerrar</Text>
+                        </TouchableOpacity>
+                    </>
+                )}
+            </View>
+        </Modal>
+    </>);
 };
 
 export default UserRankingList;

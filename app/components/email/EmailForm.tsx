@@ -16,7 +16,7 @@ export const EmailForm = () => {
 
     const handleSend = async () => {
         try {
-            const response = await fetch('http://localhost:4000/email/send-email', {
+            const response = await fetch('http://192.168.101.71:4000/email/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

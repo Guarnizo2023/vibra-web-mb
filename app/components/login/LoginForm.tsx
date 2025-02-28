@@ -1,9 +1,11 @@
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Modal, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Modal, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import useAuth from '../../hooks/useAuth';
 import { getSafeKeyObjectFromStorage } from '../../../utils/safe-token-storage';
+import { StatusBar } from 'expo-status-bar';
+const mainLogo = require('../../assets/logo-vibra.png');
 
 interface EmailFormData {
     to: string;
@@ -19,17 +21,16 @@ const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('user@test.com');
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(false);
+    //const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
+    const { login, isAuthenticated } = useAuth();
     const [formData, setFormData] = useState<EmailFormData>({
         to: 'yovanysuarezsilva@gmail.com',
         subject: 'Prueba desde React Native',
         message: '¡Este es un correo de prueba! 🚀',
     });
 
-    const { login } = useAuth();
-
-    const [isEnabled, setIsEnabled] = useState(true);
     const toggleSwitch = () => {
         setIsEnabled(previousState => !previousState);
         localStorage.setItem("keepSessionActive", `${!isEnabled}`);
@@ -41,9 +42,15 @@ const LoginForm: React.FC = () => {
         setIsEnabled(Boolean(keepSessionActive));
     }, [keepSessionActive])
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/components/(tabs)/one');
+        }
+    }, [isAuthenticated])
+
     const handlePasswordRecovery = async () => {
         try {
-            const response = await fetch('http://localhost:4000/email/send-email-recovery-password', {
+            const response = await fetch('http://192.168.101.71:4000/email/send-email-recovery-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -61,28 +68,26 @@ const LoginForm: React.FC = () => {
     };
 
     const handleNext = async () => {
-        if (!isAuthenticated) {
-            Alert.alert('Error', 'Por favor, inicie una sesión');
-        }
-        router.push('/components/one')
+        /*if (!isAuthenticated) {
+            console.log('Por favor, inicie una sesión');
+            //Alert.alert('Error', 'Por favor, inicie una sesión');
+            return;
+        }*/
+        router.push('/components/(tabs)/one')
 
     };
 
     const handleLogin = async () => {
         if (!email || !password) {
+            console.log('Por favor, inicie una sesión');
             Alert.alert('Error', 'Por favor, completa todos los campos.');
             return;
         }
 
         setLoading(true);
 
-        // router.push('/users/RegisterForm');
         try {
-            const response: any = await login(email, password);
-            if (response) {
-                Alert.alert('Éxito', 'Inicio de sesión exitoso.');
-                //console.log('Respuesta de la API:', response.data);
-            }
+            await login(email, password);
         } catch (error) {
             Alert.alert('Error', 'Credenciales incorrectas o error en la conexión.');
             //console.error('Error en la solicitud:', error);
@@ -97,8 +102,15 @@ const LoginForm: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            {!isEnabled && <>
-                <Text style={tailwind('text-2xl font-bold text-center mb-2 text-gray-500 mt-30')}>
+            <StatusBar style="inverted" />
+            <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 60 }}>
+                <Image
+                    source={mainLogo}
+                    style={{ width: 150, height: 150, alignItems: 'center', marginTop: 20 }}
+                />
+            </View>
+            {isEnabled && <>
+                <Text style={tailwind('text-2xl font-bold text-center mb-2 text-white mt-4')}>
                     Iniciar Sesión
                 </Text>
                 <TextInput
@@ -153,7 +165,7 @@ const LoginForm: React.FC = () => {
                     {loading ? 'Cargando...' : 'Registrarse'}
                 </Text>
             </TouchableOpacity>
-            <Text style={styles.link} onPress={() => setModalVisible(true)}>
+            <Text style={[styles.link, tailwind('mt-6')]} onPress={() => setModalVisible(true)}>
                 ¿Olvidaste tu contraseña?
             </Text>
             <Modal

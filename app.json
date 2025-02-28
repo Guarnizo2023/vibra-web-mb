@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.Vibra"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -28,7 +29,7 @@
       [
         "expo-router",
         {
-          "origin": "http://localhost:8081",
+          "origin": "http://192.168.101.71:8081",
           "asyncRoutes": {
             "app": "./app/**/*.tsx"
           }

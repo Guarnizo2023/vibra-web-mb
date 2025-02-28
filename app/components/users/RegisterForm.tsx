@@ -1,11 +1,14 @@
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useId, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import api from '../../services/api';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import config from '../../../config/env.json';
+
+const apiBaseUrl = config.development.apiBaseUrl;
 
 const RegisterForm = () => {
     const tailwind = useTailwind();
@@ -29,18 +32,16 @@ const RegisterForm = () => {
         if (username && password && documentNumber && typeDocument && email && role && course) {
             setIsValidateForm(true);
         }
-
     }, [username, password, documentNumber, typeDocument, email, role, course]);
 
     useEffect(() => {
         const fetchOptions_ = async () => {
             if (hightSchool != '0') {
-                const hightSchoolResponse: any = await axios.get(`http://localhost:4000/courses/allByHightSchool/${hightSchool}`);
+                const hightSchoolResponse: any = await axios.get(`${apiBaseUrl}/courses/allByHightSchool/${hightSchool}`);
                 setCourseOptions([{ _id: '0', name: 'Seleccione un curso' }, ...hightSchoolResponse.data]);
             }
         }
         fetchOptions_();
-
     }, [hightSchool]);
 
     useEffect(() => {
@@ -54,9 +55,8 @@ const RegisterForm = () => {
                         { value: '3', label: 'Cedula de ciudadania' }
                     ]
                 };
-                const roleResponse: any = await axios.get('http://localhost:4000/roles/all');
-                const hightSchoolResponse: any = await axios.get('http://localhost:4000/hightSchools/all');
-                //const cursosResponse: any = await axios.get('http://localhost:4000/courses/allByHightSchool');
+                const roleResponse: any = await axios.get(`${apiBaseUrl}/roles/all`);
+                const hightSchoolResponse: any = await axios.get(`${apiBaseUrl}/hightSchools/all`);
                 console.log('roleResponse?.data:', roleResponse?.data);
                 setTypeDocumentOptions(typeDocumentResponse?.data);
                 setRoleOptions([{ _id: '0', name: 'Seleccione un tipo' }, ...roleResponse.data]);
@@ -176,11 +176,12 @@ const RegisterForm = () => {
                     </Text>
                     <Picker
                         selectedValue={hightSchool}
-                        style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-4 my-1 bg-white')]}
+                        style={[styles.input, tailwind('w-full px-3 py-4 border border-gray-300 rounded-md mb-4 my-1 bg-white')]}
                         onValueChange={(itemValue: any) => {
                             console.log('itemValue: ', itemValue);
                             setHightSchool(itemValue);
                         }}
+                        mode="dropdown"
                     >
                         {hightSchoolOptions.map((option: any) => (
                             <Picker.Item key={option._id} label={option.name} value={option._id} />
@@ -230,18 +231,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        padding: 30,
+        padding: 4,
     },
     scrollView: {
         //backgroundColor: 'pink',
-        padding: 30,
+        padding: 20,
     },
     input: {
-        height: 40,
+        height: 50,
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 12,
         paddingHorizontal: 8,
+        alignItems: 'center',
     },
 });
 

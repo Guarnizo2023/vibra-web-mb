@@ -1,8 +1,11 @@
 import axios from 'axios';
+import config from '../../config/env.json';
+
+const apiBaseUrl = config.development.apiBaseUrl;
 
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:4000', // Reemplaza con la URL de tu API
-    timeout: 10000, // Tiempo de espera para las solicitudes
+    baseURL: `${apiBaseUrl}`,
+    timeout: 10000,
     /* headers: {
         common: { "Authorization": 'Bearer myAuthToken' },
         post: { 'Content-Type': 'application/json' }
