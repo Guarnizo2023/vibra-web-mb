@@ -1,10 +1,14 @@
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { Alert, Image, Modal, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useTailwind } from 'tailwind-rn';
-import useAuth from '../../hooks/useAuth';
-import { getSafeKeyObjectFromStorage } from '../../../utils/safe-token-storage';
 import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Modal, Platform, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useTailwind } from 'tailwind-rn';
+import { getSafeKeyObjectFromStorage } from '../../../utils/safe-token-storage';
+import useAuth from '../../hooks/useAuth';
+import api from '../../services/api';
+import { UserProvider, useUser } from '@/context/UserContext';
 const mainLogo = require('../../assets/logo-vibra.png');
 
 interface EmailFormData {
@@ -14,43 +18,60 @@ interface EmailFormData {
 }
 
 const LoginForm: React.FC = () => {
+    const keepSessionActive = async () => Platform.OS == "web"
+        ? JSON.parse(getSafeKeyObjectFromStorage('keepSessionActive'))
+        : await AsyncStorage.getItem("keepSessionActive");
 
-    const keepSessionActive: string = JSON.parse(getSafeKeyObjectFromStorage('keepSessionActive')) ?? {};
     const tailwind = useTailwind();
-    const [password, setPassword] = useState('123456');
-    const [email, setEmail] = useState('user@test.com');
+    const [password, setPassword] = useState('Maya');
+    const [email, setEmail] = useState('yov@y.com');
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isEnabled, setIsEnabled] = useState(false);
-    //const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
     const { login, isAuthenticated } = useAuth();
-    const [formData, setFormData] = useState<EmailFormData>({
-        to: 'yovanysuarezsilva@gmail.com',
-        subject: 'Prueba desde React Native',
-        message: '¡Este es un correo de prueba! 🚀',
-    });
+    const { setUser } = useUser();
 
-    const toggleSwitch = () => {
-        setIsEnabled(previousState => !previousState);
-        localStorage.setItem("keepSessionActive", `${!isEnabled}`);
-        console.log("keepSessionActive:", `${!isEnabled}`);
-    };
+    const [formData, setFormData] = useState<EmailFormData>({
+        to: 'correo@dominio.com',
+        subject: '...',
+        message: 'Hi ... 🚀',
+    });
 
     useEffect(() => {
         console.log('keepSessionActive in useEffect', keepSessionActive);
-        setIsEnabled(Boolean(keepSessionActive));
-    }, [keepSessionActive])
+        keepSessionActive().then(result => {
+            setIsEnabled(!!result);
+        });
+    }, [])
 
     useEffect(() => {
         if (isAuthenticated) {
-            router.push('/components/(tabs)/one');
+            const policiesAccepted = Platform.OS == "web"
+                ? getSafeKeyObjectFromStorage('policiesAccepted')
+                : AsyncStorage.getItem("policiesAccepted");
+            if (policiesAccepted === 'true') {
+                router.push('/components/test/TestListScreen');
+            } else {
+                router.push('/components/policy/PolicyScreen');
+            }
         }
     }, [isAuthenticated])
 
+    const toggleSwitch = async () => {
+        setIsEnabled(previousState => !previousState);
+        if (Platform.OS == "web") {
+            localStorage.setItem("keepSessionActive", `${!isEnabled}`);
+        }
+        if (Platform.OS == "android" || Platform.OS == "ios") {
+            await AsyncStorage.setItem(`keepSessionActive`, `${!isEnabled}`);
+            console.log('keepSessionActive:', await AsyncStorage.getItem("keepSessionActive"));
+        }
+    };
+
     const handlePasswordRecovery = async () => {
         try {
-            const response = await fetch('http://192.168.101.71:4000/email/send-email-recovery-password', {
+            const response: any = await api.post('/email/send-email-recovery-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -59,9 +80,10 @@ const LoginForm: React.FC = () => {
                 }),
             });
 
-            const result = await response.json();
-            setModalVisible(false);
-            Alert.alert(result.message || result.error);
+            if (response) {
+                setModalVisible(false);
+                Alert.alert(response.message || response.error);
+            }
         } catch (error) {
             Alert.alert('Error de conexión');
         }
@@ -73,7 +95,7 @@ const LoginForm: React.FC = () => {
             //Alert.alert('Error', 'Por favor, inicie una sesión');
             return;
         }*/
-        router.push('/components/(tabs)/one')
+        //router.push('/components/(tabs)/one')
 
     };
 
@@ -87,7 +109,8 @@ const LoginForm: React.FC = () => {
         setLoading(true);
 
         try {
-            await login(email, password);
+            const user = await login(email, password);
+            setUser(user);
         } catch (error) {
             Alert.alert('Error', 'Credenciales incorrectas o error en la conexión.');
             //console.error('Error en la solicitud:', error);
@@ -109,8 +132,8 @@ const LoginForm: React.FC = () => {
                     style={{ width: 150, height: 150, alignItems: 'center', marginTop: 20 }}
                 />
             </View>
-            {isEnabled && <>
-                <Text style={tailwind('text-2xl font-bold text-center mb-2 text-white mt-4')}>
+            {!isEnabled && <>
+                <Text style={tailwind('text-3xl font-bold text-center mb-2 text-white mt-4')}>
                     Iniciar Sesión
                 </Text>
                 <TextInput
@@ -127,24 +150,25 @@ const LoginForm: React.FC = () => {
                     secureTextEntry
                 />
             </>}
-            <View style={styles.switchContainer}>
-                <Text style={tailwind('mr-2 text-white')}>Mantener sesión iniciada</Text>
+            {<View style={styles.switchContainer}>
+                <Text style={[styles.switchTitle, tailwind('mr-2 text-white')]}>Mantener sesión iniciada</Text>
                 <Switch
-                    style={tailwind('mt-1')}
-                    trackColor={{ false: '#767577', true: '#81b0ff' }}
+                    style={tailwind('mt-2')}
+                    trackColor={{ false: 'blue', true: 'red' }}
                     thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
                     ios_backgroundColor="#3e3e3e"
                     value={isEnabled}
                     onValueChange={toggleSwitch}
                 />
-            </View>
+            </View>}
             {!isEnabled && <TouchableOpacity
                 style={tailwind('w-full bg-blue-500 p-3 rounded-md items-center mb-4 mt-4')}
                 onPress={handleLogin}
                 disabled={loading}
             >
-                <Text style={tailwind('text-white font-bold text-center')}>
-                    {loading ? 'Cargando...' : 'Iniciar Sesión'}
+                <Text style={tailwind('text-white text-lg font-bold text-center')}>
+                    <MaterialCommunityIcons name="shield-key" style={{ marginInline: 20 }} size={24} color="white" />
+                    {loading ? ' Cargando...' : ' Iniciar Sesión'}
                 </Text>
             </TouchableOpacity>}
             {isEnabled && <TouchableOpacity
@@ -152,7 +176,8 @@ const LoginForm: React.FC = () => {
                 onPress={handleNext}
                 disabled={loading}
             >
-                <Text style={tailwind('text-white font-bold text-center')}>
+                <Text style={tailwind('text-white text-lg font-bold text-center')}>
+                    <MaterialCommunityIcons name="script-text-key" style={{ marginInline: 20 }} size={24} color="white" />
                     {loading ? 'Cargando...' : 'Continuar'}
                 </Text>
             </TouchableOpacity>}
@@ -161,13 +186,27 @@ const LoginForm: React.FC = () => {
                 onPress={handleRegister}
                 disabled={loading}
             >
-                <Text style={tailwind('text-white font-bold text-center')}>
+                <Text style={tailwind('text-white text-lg font-bold text-center')}>
                     {loading ? 'Cargando...' : 'Registrarse'}
                 </Text>
             </TouchableOpacity>
+
             <Text style={[styles.link, tailwind('mt-6')]} onPress={() => setModalVisible(true)}>
                 ¿Olvidaste tu contraseña?
             </Text>
+
+            <TouchableOpacity
+                style={tailwind('bg-green-500 p-3 mt-4 rounded-md items-center')}
+                onPress={() => {
+                    router.push('/components/about/AboutScreen');
+                }}
+                disabled={loading}
+            >
+                <Text style={tailwind('text-white text-lg font-bold text-center')}>
+                    {'Acerca de...'}
+                </Text>
+            </TouchableOpacity>
+
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -223,22 +262,31 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     input: {
-        height: 40,
+        height: 44,
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 12,
         paddingHorizontal: 8,
+        padding: 10,
+        fontSize: 20,
     },
     link: {
         color: 'white',
         textAlign: 'center',
         marginTop: 12,
+        fontSize: 18,
     },
     switchContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 16,
+    },
+    switchTitle: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 20,
     },
     modalContainer: {
         flex: 1,
@@ -247,7 +295,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalView: {
-        width: 300,
+        width: 360,
         padding: 20,
         backgroundColor: 'white',
         borderRadius: 10,

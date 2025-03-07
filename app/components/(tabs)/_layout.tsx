@@ -2,7 +2,7 @@ import useAuth from '@/hooks/useAuth';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Tabs, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Image, View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { Image, View, Text, StyleSheet, Platform } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import CustomButton from '../ui/CustomButton';
 import SearchInput from '../ui/SearchInput';

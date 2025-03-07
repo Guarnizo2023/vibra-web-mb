@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Alert } from 'react-native';
+import api from '../../services/api';
 
 interface EmailFormData {
     to: string;
@@ -9,14 +10,14 @@ interface EmailFormData {
 
 export const EmailForm = () => {
     const [formData, setFormData] = useState<EmailFormData>({
-        to: 'yovanysuarezsilva@gmail.com', // Datos de prueba
-        subject: 'Prueba desde React Native',
-        message: '¡Este es un correo de prueba! 🚀',
+        to: 'correo@dominio.com',
+        subject: 'Prueba desde React native',
+        message: 'Hi ¡Este es un correo de prueba! 🚀',
     });
 
     const handleSend = async () => {
         try {
-            const response = await fetch('http://192.168.101.71:4000/email/send-email', {
+            const response: any = await api.post('/email/send-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -26,8 +27,9 @@ export const EmailForm = () => {
                 }),
             });
 
-            const result = await response.json();
-            Alert.alert(result.message || result.error);
+            if (response) {
+                Alert.alert(response.message || response.error);
+            }
         } catch (error) {
             Alert.alert('Error de conexión');
         }

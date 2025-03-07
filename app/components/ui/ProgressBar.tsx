@@ -1,4 +1,3 @@
-// app/(tabs)/one.tsx
 import useAuth from '@/hooks/useAuth';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -12,7 +11,6 @@ export default function ProgressBar() {
     const chargeLevel = 70; // Your actual charge level
 
     useEffect(() => {
-        // Create a repeating animation sequence
         const createChargeAnimation = () => {
             Animated.sequence([
                 Animated.timing(chargeAnimation, {
@@ -26,7 +24,7 @@ export default function ProgressBar() {
                     useNativeDriver: false,
                 })
             ]).start(() => {
-                createChargeAnimation(); // Restart the animation
+                createChargeAnimation();
             });
         };
 
@@ -59,24 +57,25 @@ export default function ProgressBar() {
                             />
                         </View>
                         <View style={styles.batteryHead} />
+                        <Text style={styles.progressText}> Nivel de Vibra: {chargeLevel}%</Text>
                     </View>
-                    <Text style={styles.progressText}>Nivel de Vibra: {chargeLevel}%</Text>
                 </View>
             </View>
         </ScrollView>
     );
 }
-// Add this helper function before the styles
+
 const getChargeColor = (level: number) => {
     if (level <= 20) return '#FF4444';
     if (level <= 50) return '#FFBB33';
     return '#4CAF50';
 };
+
 const styles = StyleSheet.create({
     progressBarContainer: {
         width: '100%',
         borderRadius: 10,
-        marginVertical: 10,
+        marginVertical: 2,
     },
     progressBar: {
         height: '100%',
@@ -85,7 +84,7 @@ const styles = StyleSheet.create({
     },
     batteryContainer: {
         alignItems: 'center',
-        marginVertical: 20,
+        marginVertical: 10,
     },
     batteryWrapper: {
         flexDirection: 'row',
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     },
     batteryBody: {
         width: 150,
-        height: 70,
+        height: 50,
         borderWidth: 3,
         borderColor: '#333',
         borderRadius: 10,
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
     },
     progressText: {
         textAlign: 'center',
-        marginTop: 10,
+        marginTop: 4,
         fontWeight: 'bold',
         color: '#333',
         fontSize: 16,

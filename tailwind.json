@@ -339,6 +339,16 @@
       "color": "#1e3a8a"
     }
   },
+  "bg-green-500": {
+    "style": {
+      "backgroundColor": "#ef4444"
+    }
+  },
+  "text-green-900": {
+    "style": {
+      "color": "#1e3a8a"
+    }
+  },
   "p-0": {
     "style": {
       "padding": 0

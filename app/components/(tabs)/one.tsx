@@ -1,16 +1,22 @@
 // app/(tabs)/one.tsx
 import useAuth from '@/hooks/useAuth';
 import { Text, TouchableOpacity, View, StyleSheet, ScrollView, Animated } from 'react-native';
-import { useTailwind } from 'tailwind-rn';
+//import { useTailwind } from 'tailwind-rn';
 import { mockDashboardData } from '../../../utils/mockData';
 import CardComponent from '../ui/CardComponent';
 import UserRankingList from '../users/UserRankingList';
 import UploadFile from '../ui/UploadFile';
 import { useState, useRef, useEffect } from 'react';
 import ProgressBar from '../ui/ProgressBar';
+import ReproductorMedia from '../ui/ReproductorMedia';
+import GestureAnimate from '../ui/animation/GestureAnimate';
+import GesturePan from '../ui/animation/GesturePan';
+import GestureElasticMenu from '../ui/animation/GestureElasticMenu';
+import FloatButton from '../ui/animation/FloatButton';
+import WelcomeScreen from '../ui/animation/WelcomeScreen';
 
 export default function TabOne() {
-    const tailwind = useTailwind();
+    //const tailwind = useTailwind();
     const { logout } = useAuth();
     const [animate, setAnimate] = useState(false);
     const animation = useRef(new Animated.Value(0)).current;
@@ -37,18 +43,23 @@ export default function TabOne() {
     });
 
     return (
+
         <ScrollView style={styles.scrollView}>
+            <CardComponent />
+            <ProgressBar />
+            {/*
+            <WelcomeScreen navigation={undefined} />
             <View style={{ flex: 1, paddingHorizontal: 20, top: 0 }}>
-                {/*<Text>Datos mockeados: {mockDashboardData.tabOne}</Text>
-            <UploadFile />*/}
-                <CardComponent />
-                <ProgressBar />
-                {/*<View style={{ flex: 1, alignContent: 'center', alignItems: 'center' }}>
+                <Text>Datos mockeados: {mockDashboardData.tabOne}</Text>
+            <UploadFile />
+                <FloatButton />
+                <ReproductorMedia />
+                <View style={{ flex: 1, alignContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => setAnimate(true)}>
-                        <Animated.View style={[styles.cuadro, { transform: [{ scale: escala }] }]} />
+                        <Animated.View style={[styles.box, { transform: [{ scale: escala }] }]} />
                     </TouchableOpacity>
-                </View>*/}
-            </View>
+                </View>
+            </View>*/}
         </ScrollView>
     );
 }
@@ -70,7 +81,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    cuadro: {
+    box: {
         marginTop: 20,
         width: 10,
         height: 10,

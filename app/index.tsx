@@ -8,6 +8,8 @@ import { SchedulableTriggerInputTypes } from 'expo-notifications';
 import Constants from 'expo-constants';
 import LocalStorageComponent from './components/ui/LocalStorageComponent';
 import { FlatListComponente } from './components/ui/FlatList';
+// Import the global.css file in the index.js file:
+import '../global.css';
 //import messaging from '@react-native-firebase/messaging';
 
 // Solicitar permisos para notificaciones (iOS)
@@ -149,7 +151,7 @@ const Index: React.FC = () => {
 
   return (
     <ImageBackground
-      source={require('./assets/bg-2.jpeg')}
+      source={require('./assets/sponsors/fondo_vibra_new.jpg')}
       style={styles.background}
       resizeMode="cover"
     >
@@ -161,7 +163,7 @@ const Index: React.FC = () => {
           <LocalStorageComponent key="ultimoAcceso" label="Último Acceso" defaultValue="ultimoAcceso" />
           <LocalStorageComponent key="theme" label="Tema" defaultValue="light" />*/}
         </View>
-        <Text style={{ fontSize: 12, color: '#FFFFFF' }}>Desarrollado por equipo Vibra</Text>
+        <Text style={{ fontSize: 16, marginBottom: 10, color: '#FFFFFF' }}>Desarrollado por equipo Vibra</Text>
         <StatusBar style="auto" />
       </View>
     </ImageBackground>

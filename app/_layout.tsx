@@ -1,9 +1,12 @@
 import * as Notifications from 'expo-notifications';
 import { router, Slot, useRouter } from "expo-router";
+import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from "react";
-import { ImageBackground, StyleSheet, Platform } from "react-native";
+import { ImageBackground, Platform, StyleSheet } from "react-native";
 import { TailwindProvider } from "tailwind-rn";
+import '../global.css';
 import utilities from "../tailwind.json";
+import { UserProvider } from './context/UserContext';
 import useAuth from "./hooks/useAuth";
 
 function useNotificationObserver() {
@@ -46,6 +49,7 @@ export default function RootLayout() {
       console.log("Authenticated:", authenticated);
       if (isAuthenticated) {
         router.replace('/components/(tabs)/one');
+        //router.replace('/components/test/TestListScreen');
       } else {
         router.push("/");
       }
@@ -55,13 +59,16 @@ export default function RootLayout() {
   useNotificationObserver();
   return (
     <TailwindProvider utilities={utilities}>
-      <ImageBackground
-        source={require("./assets/bg-2.jpeg")}
-        style={styles.background}
-        resizeMode="cover"
-      >
-        <Slot />
-      </ImageBackground >
+      <UserProvider>
+        <ImageBackground
+          source={require("./assets/sponsors/fondo_vibra_new.jpg")}
+          style={styles.background}
+          resizeMode="cover"
+        >
+          <StatusBar style="inverted" />
+          <Slot />
+        </ImageBackground>
+      </UserProvider>
     </TailwindProvider>
   );
 }

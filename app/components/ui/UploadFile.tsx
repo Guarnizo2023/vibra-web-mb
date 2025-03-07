@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Alert, StyleSheet } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 //import DocumentPicker from 'react-native-document-picker';
 import * as DocumentPicker from 'expo-document-picker';
-import axios from 'axios';
 import Video from 'react-native-video';
-
-const API_URL = 'http://192.168.101.72:4000/file-upload'; // Reemplaza con la IP de tu backend
+import api from '../../services/api';
 
 const UploadFile = () => {
     const [file, setFile] = useState<any | null>(null);
@@ -58,7 +56,7 @@ const UploadFile = () => {
         console.log('formData', formData);
 
         try {
-            const response: any = await axios.post(`${API_URL}/upload`, formData, {
+            const response: any = await api.post(`/file-upload/upload`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -79,7 +77,7 @@ const UploadFile = () => {
 
             {fileId && (
                 <Video
-                    source={{ uri: `${API_URL}/stream/${fileId}` }}
+                    source={{ uri: `/file-upload/stream/${fileId}` }}
                     style={styles.video}
                     controls
                     paused

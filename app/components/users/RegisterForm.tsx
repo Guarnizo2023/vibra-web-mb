@@ -1,14 +1,10 @@
 import { Picker } from '@react-native-picker/picker';
-import axios from 'axios';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useTailwind } from 'tailwind-rn';
 import api from '../../services/api';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import config from '../../../config/env.json';
-
-const apiBaseUrl = config.development.apiBaseUrl;
 
 const RegisterForm = () => {
     const tailwind = useTailwind();
@@ -37,7 +33,7 @@ const RegisterForm = () => {
     useEffect(() => {
         const fetchOptions_ = async () => {
             if (hightSchool != '0') {
-                const hightSchoolResponse: any = await axios.get(`${apiBaseUrl}/courses/allByHightSchool/${hightSchool}`);
+                const hightSchoolResponse: any = await api.get(`/courses/allByHightSchool/${hightSchool}`);
                 setCourseOptions([{ _id: '0', name: 'Seleccione un curso' }, ...hightSchoolResponse.data]);
             }
         }
@@ -55,13 +51,12 @@ const RegisterForm = () => {
                         { value: '3', label: 'Cedula de ciudadania' }
                     ]
                 };
-                const roleResponse: any = await axios.get(`${apiBaseUrl}/roles/all`);
-                const hightSchoolResponse: any = await axios.get(`${apiBaseUrl}/hightSchools/all`);
+                const roleResponse: any = await api.get(`/roles/all`);
+                const hightSchoolResponse: any = await api.get(`/hightSchools/all`);
                 console.log('roleResponse?.data:', roleResponse?.data);
                 setTypeDocumentOptions(typeDocumentResponse?.data);
                 setRoleOptions([{ _id: '0', name: 'Seleccione un tipo' }, ...roleResponse.data]);
                 setHightSchoolOptions([{ _id: '0', name: 'Seleccione una institución' }, ...hightSchoolResponse.data]);
-                //setCourseOptions([{ id: '0', name: 'Seleccione un curso' }, ...cursosResponse.data ]);
             } catch (error) {
                 console.error('Error fetching options', error);
             }
@@ -83,7 +78,6 @@ const RegisterForm = () => {
         setLoading(true);
         const uniqueID = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         try {
-            // console.log('data:',{ username, password, documentNumber, typeDocument, email, role, course, hightSchool});
             const response = await api.post('/users/create', { id: uniqueID, username, password, documentNumber, typeDocument, email, role, course, hightSchool, avatar: '04.jpg' });
             if (response) {
                 Alert.alert('Éxito', 'Registro de usuario exitoso.');
@@ -234,7 +228,6 @@ const styles = StyleSheet.create({
         padding: 4,
     },
     scrollView: {
-        //backgroundColor: 'pink',
         padding: 20,
     },
     input: {
