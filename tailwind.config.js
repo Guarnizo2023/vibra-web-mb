@@ -5,7 +5,8 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   content: [
     "./app/index.ts",
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./app/components/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
     screens: {
@@ -79,6 +80,7 @@ module.exports = {
   },
   plugins: [
     //require("tailwind-rn"),
+    "nativewind/babel",
   ],
   corePlugins: require('tailwind-rn/unsupported-core-plugins'),
 }

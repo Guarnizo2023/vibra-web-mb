@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
@@ -6,6 +5,7 @@ import { useTailwind } from 'tailwind-rn';
 import socket from '../../../socket';
 import { FontAwesome5 } from "@expo/vector-icons";
 import config from '../../../config/env.json';
+import api from '../../services/api';
 
 const apiBaseUrl = config.development.apiBaseUrl;
 
@@ -20,13 +20,11 @@ const UserRankingList = () => {
     const [rank, setRank] = useState(550);
 
     useEffect(() => {
-        // Escuchar el evento "customEvent" desde el backend
         socket.on('customEvent', (data) => {
             setMessage(data.message);
             Alert.alert('Evento Recibido', data.message);
         });
 
-        // Enviar un evento al backend
         socket.emit('clientEvent', 'Hola desde el cliente');
 
         return () => {
@@ -37,7 +35,11 @@ const UserRankingList = () => {
     useEffect(() => {
         const fetchOptions = async () => {
             try {
-                const roleResponse: any = await axios.get(`${apiBaseUrl}/users/all`);
+                const roleResponse: any = await api.get(`/users/all`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token') ?? 'asdf'}`
+                    }
+                });
                 console.log('roleResponse?.data:', roleResponse?.data);
                 setItems([...roleResponse.data,
                 {
