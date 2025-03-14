@@ -11,20 +11,23 @@ const useAuth = () => {
     const router = useRouter();
 
     const actionLogin = async (email: string, password: string) => {
+        console.log('email in actionLogin: ', email);
+        console.log('password in actionLogin: ', password);
+
         if (email !== '' && password !== '') {
             try {
                 const response = await api.post('/users/login/userValidate', {
                     email,
                     password,
                 });
-                console.log('response: ', response);
+                //console.log('response: ', response);
 
                 if (response) {
                     setUser(response.data?.user)
                     setIsAuthenticated(true);
                     // Alert.alert('Éxito', 'Inicio de sesión exitoso.');
-                    const token = response.data?.access_token;
-                    await SecureStore.setItemAsync('authToken', token);
+                    //const token = response.data?.access_token;
+                    //await SecureStore.setItemAsync('authToken', token);
                     return response.data?.user;
                 }
             } catch (error) {
@@ -37,17 +40,17 @@ const useAuth = () => {
             setIsAuthenticated(false);
             // throw new Error('Credenciales inválidas');
         }
-        return null
+        //return null
     };
 
     const checkAuth = async () => {
-        const token = await SecureStore.getItemAsync('authToken');
+        const token = '';//await SecureStore.getItemAsync('authToken');
         setIsAuthenticated(!!token);
         return !!token;
     };
 
     const logout = async () => {
-        await SecureStore.deleteItemAsync('authToken');
+        //await SecureStore.deleteItemAsync('authToken');
         setIsAuthenticated(false);
         router.replace('/');
     };

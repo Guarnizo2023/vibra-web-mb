@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { Text, View } from 'react-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { useTailwind } from 'tailwind-rn';
 

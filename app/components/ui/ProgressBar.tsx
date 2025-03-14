@@ -57,8 +57,8 @@ export default function ProgressBar() {
                             />
                         </View>
                         <View style={styles.batteryHead} />
-                        <Text style={styles.progressText}> Nivel de Vibra: {chargeLevel}%</Text>
                     </View>
+                    <Text style={styles.progressText}> Nivel de Vibra: {chargeLevel}%</Text>
                 </View>
             </View>
         </ScrollView>

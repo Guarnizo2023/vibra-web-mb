@@ -62,7 +62,7 @@ export default function TabsLayout() {
                 <Text style={[{ paddingLeft: 10, paddingTop: Platform.OS == 'ios' || Platform.OS == 'android' ? 25 : 0 }, tailwind("text-6xl text-white")]}> Vibra </Text>
                 {Platform.OS == 'ios' || Platform.OS == 'android' && <Text style={[{ paddingRight: -10, paddingTop: 50, fontStyle: 'italic', color: '#EAEAEA' }, tailwind("text-xl text-white")]}> Emociones </Text>}
             </View>
-            <View style={{ marginHorizontal: 20 }} >
+            {false && <View style={{ marginHorizontal: 20 }} >
                 <SearchInput
                     data={sampleEvents}
                     onSearch={setFilteredEvents}
@@ -70,19 +70,17 @@ export default function TabsLayout() {
                     placeholder="Buscar eventos..."
                     containerStyle={{ backgroundColor: '#ffffff', borderRadius: 10 }}
                 />
-            </View>
+            </View>}
             <Tabs screenOptions={{
+                headerShown: false,
                 tabBarPosition: 'top',
                 tabBarStyle: {
                     backgroundColor: '#FFFFFF',
                     width: '90%',
                     height: 64,
                     marginInline: 'auto',
-                    //borderStartStartRadius: 10,
-                    //borderStartEndRadius: 10,
                     borderTopStartRadius: 10,
                     borderTopEndRadius: 10,
-                    //borderTopLeftRadius: 10,
                     marginTop: Platform.OS == 'ios' ? -4 : 0,
                     paddingTop: Platform.OS == 'ios' ? -10 : 0,
                     marginBottom: Platform.OS == 'ios' ? -10 : 0,
