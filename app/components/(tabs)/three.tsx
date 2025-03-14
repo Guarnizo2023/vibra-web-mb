@@ -1,4 +1,3 @@
-// app/(tabs)/one.tsx
 import { View, Text } from 'react-native';
 import { mockDashboardData } from '../../../utils/mockData';
 import CalendarComponent from '../ui/CalendarComponent';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Platform, Modal, ImageBackground } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, Platform, Modal } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import { useRouter } from 'expo-router';
 import { getSafeKeyObjectFromStorage } from '../../../utils/safe-token-storage';

@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text, Image } from 'react-native';
-import { useTailwind } from 'tailwind-rn';
-import CustomButton from './CustomButton';
-import { useRouter } from 'expo-router';
 import { useUser } from '@/context/UserContext';
 import { useCurrentDate } from '@/hooks/currentDate';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { Image, Text, View } from 'react-native';
+import { useTailwind } from 'tailwind-rn';
+import CustomButton from './CustomButton';
 
 const CardComponent = ({ emotion: any }: any) => {
   const { user } = useUser();
@@ -15,7 +15,7 @@ const CardComponent = ({ emotion: any }: any) => {
   return (
     <View style={tailwind('w-full p-2 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-white dark:border-gray-400')}>
       <View style={{ alignItems: 'center', padding: 10 }}>
-        <Text style={tailwind('text-xl font-bold text-gray-600')}>
+        <Text style={tailwind('text-xl font-bold text-gray-600 mb-4')}>
           {currentDate}
         </Text>
         <Image

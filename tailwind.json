@@ -1479,6 +1479,16 @@
       "marginStart": 10
     }
   },
+  "h-2": {
+    "style": {
+      "height": 10
+    }
+  },
+  "w-2": {
+    "style": {
+      "width": 10
+    }
+  },
   "h-3": {
     "style": {
       "height": 12
@@ -1640,6 +1650,67 @@
   "h-10": {
     "style": {
       "height": 40
+    }
+  },
+  "bg-gradient-to-r": {
+    "style": {
+      "backgroundImage": {
+        "gradient": "linear",
+        "colors": [
+          "#4338CA",
+          "#6D28D9"
+        ],
+        "start": [
+          0,
+          0
+        ],
+        "end": [
+          1,
+          0
+        ]
+      }
+    }
+  },
+  "from-blue-400": {
+    "style": {
+      "backgroundColor": "#93C5FD"
+    }
+  },
+  "to-blue-600": {
+    "style": {
+      "backgroundColor": "#3B82F6"
+    }
+  },
+  "transition-all": {
+    "style": {
+      "transitionProperty": "all"
+    }
+  },
+  "ease-in-out": {
+    "style": {
+      "transitionTimingFunction": "ease-in-out"
+    }
+  },
+  "duration-300": {
+    "style": {
+      "transitionDuration": 300
+    }
+  },
+  "overflow-hidden": {
+    "style": {
+      "overflow": "hidden"
+    }
+  },
+  "shadow-inner": {
+    "style": {
+      "shadowColor": "#000",
+      "shadowOffset": {
+        "width": 0,
+        "height": 0
+      },
+      "shadowOpacity": 0.25,
+      "shadowRadius": 4,
+      "elevation": 2
     }
   }
 }

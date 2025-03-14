@@ -8,6 +8,7 @@ import '../global.css';
 import utilities from "../tailwind.json";
 import { UserProvider } from './context/UserContext';
 import useAuth from "./hooks/useAuth";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function useNotificationObserver() {
   useEffect(() => {
@@ -39,6 +40,8 @@ function useNotificationObserver() {
   }, []);
 }
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
   console.log("en RootLayout:");
   const router = useRouter();
@@ -49,27 +52,31 @@ export default function RootLayout() {
       console.log("Authenticated:", authenticated);
       if (isAuthenticated) {
         router.replace('/components/(tabs)/one');
-        //router.replace('/components/test/TestListScreen');
+        //router.replace('/components/ui/RankingScreen');
       } else {
-        router.push("/");
+        //router.push("/");
+        router.replace('/components/(tabs)/emotion');
+        //router.push("/components/ui/MediaPlayer");
       }
     });
   }, []);
 
   useNotificationObserver();
   return (
-    <TailwindProvider utilities={utilities}>
-      <UserProvider>
-        <ImageBackground
-          source={require("./assets/sponsors/fondo_vibra_new.jpg")}
-          style={styles.background}
-          resizeMode="cover"
-        >
-          <StatusBar style="inverted" />
-          <Slot />
-        </ImageBackground>
-      </UserProvider>
-    </TailwindProvider>
+    <QueryClientProvider client={queryClient}>
+      <TailwindProvider utilities={utilities}>
+        <UserProvider>
+          <ImageBackground
+            source={require("./assets/sponsors/fondo_vibra_new.jpg")}
+            style={styles.background}
+            resizeMode="cover"
+          >
+            <StatusBar style="inverted" />
+            <Slot />
+          </ImageBackground>
+        </UserProvider>
+      </TailwindProvider>
+    </QueryClientProvider>
   );
 }
 const styles = StyleSheet.create({

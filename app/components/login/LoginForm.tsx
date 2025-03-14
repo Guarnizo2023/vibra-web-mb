@@ -100,6 +100,9 @@ const LoginForm: React.FC = () => {
     };
 
     const handleLogin = async () => {
+        console.log('Email:', email);
+        console.log('Password:', password);
+
         if (!email || !password) {
             console.log('Por favor, inicie una sesión');
             Alert.alert('Error', 'Por favor, completa todos los campos.');
