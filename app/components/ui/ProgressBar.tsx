@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Animated, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 
-export default function ProgressBar() {
+export default function ProgressBarVibra() {
     const tailwind = useTailwind();
     const { logout } = useAuth();
     const [animate, setAnimate] = useState(false);
@@ -41,7 +41,7 @@ export default function ProgressBar() {
     });
 
     return (
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={[styles.scrollView, tailwind('bg-gray-50')]}>
             <View style={styles.progressBarContainer}>
                 <View style={styles.batteryContainer}>
                     <View style={styles.batteryWrapper}>

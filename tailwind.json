@@ -341,7 +341,7 @@
   },
   "bg-green-500": {
     "style": {
-      "backgroundColor": "#ef4444"
+      "backgroundColor": "#166534"
     }
   },
   "text-green-900": {
@@ -1711,6 +1711,77 @@
       "shadowOpacity": 0.25,
       "shadowRadius": 4,
       "elevation": 2
+    }
+  },
+  "text-green-600": {
+    "style": {
+      "color": "#16A34A"
+    }
+  },
+  "align-center": {
+    "style": {
+      "textAlign": "center"
+    }
+  },
+  "dark:border-gray-400": {
+    "style": {
+      "borderColor": "#6B7280"
+    }
+  },
+  "dark:bg-white": {
+    "style": {
+      "backgroundColor": "#FFFFFF"
+    }
+  },
+  "dark:text-gray-900": {
+    "style": {
+      "color": "#18181B"
+    }
+  },
+  "dark:bg-gray-900": {
+    "style": {
+      "backgroundColor": "#18181B"
+    }
+  },
+  "max-w-full": {
+    "style": {
+      "maxWidth": "100%",
+      "width": "100%"
+    }
+  },
+  "max-w-md": {
+    "style": {
+      "maxWidth": 384
+    }
+  },
+  "max-w-lg": {
+    "style": {
+      "maxWidth": 512
+    }
+  },
+  "max-w-xl": {
+    "style": {
+      "maxWidth": 640
+    }
+  },
+  "max-w-2xl": {
+    "style": {
+      "maxWidth": 768
+    }
+  },
+  "max-w-3xl": {
+    "style": {
+      "maxWidth": 896
+    }
+  },
+  "max-w-4xl": {
+    "style": {
+      "maxWidth": 1024
+    }
+  },
+  "max-w-5xl": {
+    "style": {
+      "maxWidth": 1152
     }
   }
 }

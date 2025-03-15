@@ -1,4 +1,4 @@
-import { useUser } from '@/context/UserContext';
+import useUser from '@/context/UserContext';
 import api from '@/services/api';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';

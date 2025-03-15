@@ -2,9 +2,9 @@ import React from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import ReproductorMedia from '../ui/ReproductorMedia';
 import RankingScreen from '../ui/RankingScreen';
-import { DailyActivityScreen } from '../activity/DailyActivityScreen';
+import DailyActivityScreen from './DailyActivityScreen';
 import MediaPlayer from '../ui/MediaPlayer';
-import { ActivityHistoryList } from '../activity/ActivityHistoryList';
+import ActivityHistoryList from './ActivityHistoryList';
 
 interface EmotionScreenProps {
     //
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+        marginTop: 32,
     },
 });
 

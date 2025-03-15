@@ -8,7 +8,7 @@ import { useTailwind } from 'tailwind-rn';
 import { getSafeKeyObjectFromStorage } from '../../../utils/safe-token-storage';
 import useAuth from '../../hooks/useAuth';
 import api from '../../services/api';
-import { UserProvider, useUser } from '@/context/UserContext';
+import useUser, { UserProvider } from '@/context/UserContext';
 const mainLogo = require('../../assets/logo-vibra.png');
 
 interface EmailFormData {

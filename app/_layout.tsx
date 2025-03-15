@@ -3,6 +3,7 @@ import { router, Slot, useRouter } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from "react";
 import { ImageBackground, Platform, StyleSheet } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { TailwindProvider } from "tailwind-rn";
 import '../global.css';
 import utilities from "../tailwind.json";
@@ -43,7 +44,6 @@ function useNotificationObserver() {
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
-  console.log("en RootLayout:");
   const router = useRouter();
   const { isAuthenticated, checkAuth } = useAuth();
 
@@ -54,9 +54,7 @@ export default function RootLayout() {
         router.replace('/components/(tabs)/one');
         //router.replace('/components/ui/RankingScreen');
       } else {
-        //router.push("/");
-        router.replace('/components/(tabs)/emotion');
-        //router.push("/components/ui/MediaPlayer");
+        router.replace('/');
       }
     });
   }, []);
@@ -66,14 +64,16 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <TailwindProvider utilities={utilities}>
         <UserProvider>
-          <ImageBackground
-            source={require("./assets/sponsors/fondo_vibra_new.jpg")}
-            style={styles.background}
-            resizeMode="cover"
-          >
-            <StatusBar style="inverted" />
-            <Slot />
-          </ImageBackground>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <ImageBackground
+              source={require("./assets/sponsors/fondo_vibra_new.jpg")}
+              style={styles.background}
+              resizeMode="cover"
+            >
+              <StatusBar style="inverted" />
+              <Slot />
+            </ImageBackground>
+          </GestureHandlerRootView>
         </UserProvider>
       </TailwindProvider>
     </QueryClientProvider>

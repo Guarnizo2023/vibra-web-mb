@@ -43,7 +43,7 @@ export default function TabsLayout() {
     };
 
     const getTabTextStyle = (tabName: string) => {
-        console.log('pathname:', pathname);
+        //console.log('pathname:', pathname);
         const isSelected = pathname.includes(tabName);
         return {
             color: isSelected ? '#0066CC' : '#666666',
@@ -54,7 +54,7 @@ export default function TabsLayout() {
     return (
         <View style={{ flex: 1 }}>
             <StatusBar style={Platform.OS == 'android' ? 'dark' : 'inverted'} backgroundColor='#EAEAEA' />
-            <View style={{ flexDirection: Platform.OS == 'ios' || Platform.OS == 'android' ? 'row' : 'column', alignItems: 'center', padding: 10 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
                 <Image
                     source={mainLogo}
                     style={{ width: 100, height: 100, marginTop: Platform.OS == 'android' ? 40 : 16 }}

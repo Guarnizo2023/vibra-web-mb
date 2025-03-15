@@ -6,7 +6,13 @@ export interface PaginatedResponse<T> {
     totalDocs: number;
 }
 
-export interface ActivityResponse {
+export interface ResponseDto {
+    questionId: string;
+    answer: string;
+    responseTime: number;
+}
+
+interface ActivityResponse {
     activity: Activity;
     schedule: {
         date: Date;
@@ -14,8 +20,4 @@ export interface ActivityResponse {
     };
 }
 
-export interface ResponseDto {
-    questionId: string;
-    answer: string;
-    responseTime: number;
-}
+export default ActivityResponse;

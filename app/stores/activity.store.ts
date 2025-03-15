@@ -14,7 +14,7 @@ interface ActivityState {
     };
 }
 
-export const useActivityStore = create<ActivityState>()((set) => ({
+const useActivityStore = create<ActivityState>()((set) => ({
     currentStep: 0,
     responses: [],
     mediaStatus: 'loading',
@@ -40,3 +40,4 @@ export const useActivityStore = create<ActivityState>()((set) => ({
     },
 }));
 
+export default useActivityStore;

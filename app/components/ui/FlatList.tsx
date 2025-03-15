@@ -2,7 +2,7 @@ import { FlatList, Text } from 'react-native';
 
 const data = Array.from({ length: 1000 }, (_, i) => ({ id: i, text: `Elemento ${i}` }));
 
-export const FlatListComponente = () => (
+const FlatListComponente = () => (
     <FlatList
         data={data}
         renderItem={({ item }) => <Text>{item.text}</Text>}
@@ -14,3 +14,5 @@ export const FlatListComponente = () => (
         )}
     />
 );
+
+export default FlatListComponente;

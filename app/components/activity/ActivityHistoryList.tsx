@@ -1,10 +1,10 @@
 import React from 'react';
 import { FlatList, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useActivities } from './queries/activity';
+import useActivities from './queries/activity';
 import { useTailwind } from 'tailwind-rn';
 import EmotionBadge from './EmotionBadge';
 
-export const ActivityHistoryList = () => {
+const ActivityHistoryList = () => {
     const tailwind = useTailwind();
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError, error, isLoading } = useActivities();
 
@@ -49,3 +49,5 @@ export const ActivityHistoryList = () => {
         />
     );
 };
+
+export default ActivityHistoryList;

@@ -9,7 +9,7 @@ interface Response {
  * @param responses - An array of Response objects.
  * @returns The calculated score.
  */
-export const calculateScore = (responses: Response[]): number => {
+const calculateScore = (responses: Response[]): number => {
     const BASE_MULTIPLIER = 100;
     const TIME_PENALTY_PER_SECOND = 0.1;
     const COMPLETENESS_BONUS = 50;
@@ -24,6 +24,7 @@ export const calculateScore = (responses: Response[]): number => {
 
     return Math.max(0, baseScore - timePenalty + completenessBonus);
 };
+export default calculateScore;
 
 /**
  * Calculates the maximum score based on the given questions count.

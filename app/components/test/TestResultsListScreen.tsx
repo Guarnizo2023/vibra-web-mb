@@ -1,4 +1,4 @@
-import { useUser } from '@/context/UserContext';
+import useUser from '@/context/UserContext';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, RefreshControl, StyleSheet, TouchableOpacity, View } from 'react-native';

@@ -8,7 +8,7 @@ interface EmailFormData {
     message: string;
 }
 
-export const EmailForm = () => {
+const EmailForm = () => {
     const [formData, setFormData] = useState<EmailFormData>({
         to: 'correo@dominio.com',
         subject: 'Prueba desde React native',
@@ -57,3 +57,5 @@ export const EmailForm = () => {
         </View>
     );
 };
+
+export default EmailForm;

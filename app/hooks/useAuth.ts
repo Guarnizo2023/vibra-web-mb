@@ -52,7 +52,7 @@ const useAuth = () => {
     const logout = async () => {
         //await SecureStore.deleteItemAsync('authToken');
         setIsAuthenticated(false);
-        router.replace('/');
+        router.push('/');
     };
 
     return { isAuthenticated, login: actionLogin, checkAuth, logout, user };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import { Question } from '../../types/activity';
+import Question from '../../types/activity';
 import { Ionicons } from '@expo/vector-icons';
 
 interface QuestionSectionProps {
@@ -25,15 +25,16 @@ const QuestionSection: React.FC<QuestionSectionProps> = ({ questions, onSubmit }
             return;
         }
 
-        if (questions?.type === 'multiple' && !selectedAnswers[questions?._id!]) {
+        if (questions?.type === 'multiple' && !selectedAnswers[questions?.id!]) {
             setError('Por favor selecciona una respuesta');
             return;
         }
 
         const answers = questions?.type === 'multiple'
             ? selectedAnswers
-            : { [questions?._id!]: openAnswer };
+            : { [questions?.id!]: openAnswer };
 
+        console.log("Answers:", answers);
         onSubmit(answers);
     };
 
@@ -51,12 +52,12 @@ const QuestionSection: React.FC<QuestionSectionProps> = ({ questions, onSubmit }
                             key={index + 1}
                             style={[
                                 styles.optionButton,
-                                selectedAnswers[questions?._id!] === option && styles.selectedOption
+                                selectedAnswers[questions?.id!] === option && styles.selectedOption
                             ]}
-                            onPress={() => setSelectedAnswers({ [questions?._id!]: option })}
+                            onPress={() => setSelectedAnswers({ [questions?.id!]: option })}
                         >
                             <Text style={styles.optionText}>{option}...</Text>
-                            {selectedAnswers[questions?._id!] === option && (
+                            {selectedAnswers[questions?.id!] === option && (
                                 <Ionicons name="checkmark-circle" size={24} color="#4F46E5" />
                             )}
                         </TouchableOpacity>
@@ -79,7 +80,7 @@ const QuestionSection: React.FC<QuestionSectionProps> = ({ questions, onSubmit }
             <TouchableOpacity
                 style={styles.submitButton}
                 onPress={handleSubmit}
-                disabled={questions?.type === 'multiple' && !selectedAnswers[questions?._id!]}
+                disabled={questions?.type === 'multiple' && !selectedAnswers[questions?.id!]}
             >
                 <Text style={styles.submitButtonText}>Continuar</Text>
                 <Ionicons name="arrow-forward" size={20} color="white" />
