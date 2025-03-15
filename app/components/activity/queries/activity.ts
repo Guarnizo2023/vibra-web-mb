@@ -1,11 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ActivityService } from '../../../services/api';
 import { ResponseDto } from '@/types/api';
+import useUser from '@/context/UserContext';
 
 const useActivities = (page = 1) => {
+    const { user } = useUser();
+
     return useQuery({
         queryKey: ['activities', page],
-        queryFn: () => ActivityService.getActivityHistory(page),
+        queryFn: () => ActivityService.getActivityHistory(page, user?.id),
         //keepPreviousData: true,
         staleTime: 1000 * 60 * 5, // 5 minutes
         refetchOnWindowFocus: false,

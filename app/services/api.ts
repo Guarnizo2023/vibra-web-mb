@@ -3,10 +3,10 @@
  * @module services/api
  */
 import { Platform } from 'react-native';
-import { storage } from '../stores/storage';
+import storage from '../stores/storage';
 import axios from 'axios';
 import config from '../../config/env.json';
-import { ActivityResponse, PaginatedResponse } from '@/types/api';
+import ActivityResponse, { PaginatedResponse } from '@/types/api';
 
 /**
  * Base URL for the API obtained from environment configuration
@@ -69,15 +69,12 @@ export const ActivityService = {
         api.get<ActivityResponse>('/activities/daily/current').then(res => res.data),
     submitResponse: (activityId: string, userId: string, data: any) =>
         api.post(`/activities/${activityId}/${userId}/submit`, {
-            params: {
-                id: activityId,
-                userId,
-            },
+            params: { id: activityId, userId },
             answers: [...data]
         }),
-    getActivityHistory: (page = 1) =>
+    getActivityHistory: (page = 1, userId = '') =>
         api.get<PaginatedResponse<Activity>>('/activities', {
-            params: { page, limit: 10, emotion: 'all' }
+            params: { page, limit: 10, userId, emotion: 'all' }
         }).then(res => res.data),
     getEmotionsList: () => api.get<string[]>('/activities/emotions/list')
 };
