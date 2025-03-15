@@ -1,11 +1,12 @@
 import React from 'react';
-import { FlatList, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import useActivities from './queries/activity';
+import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import EmotionBadge from './EmotionBadge';
+import useActivities from './queries/activity';
 
 const ActivityHistoryList = () => {
     const tailwind = useTailwind();
+
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isError, error, isLoading } = useActivities();
 
     if (isLoading) {
@@ -25,6 +26,9 @@ const ActivityHistoryList = () => {
     }
 
     const activities = data?.docs.flatMap((page: any) => page) || [];
+    const responses = data?.userResponse.flatMap((item: any) => item) || [];
+
+    console.log('data', data);
 
     return (
         <FlatList

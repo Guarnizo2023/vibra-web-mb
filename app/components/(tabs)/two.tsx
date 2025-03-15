@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 import { mockDashboardData } from '../../../utils/mockData';
 import BlogCard from '../ui/BlogCard';
 import UserRankingList from '../users/UserRankingList';
-import { ActivityHistoryList } from '../activity/ActivityHistoryList';
+import ActivityHistoryList from '../activity/ActivityHistoryList';
 
 export default function TabTwo() {
     return (
