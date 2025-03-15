@@ -39,7 +39,7 @@ const ScoreCounter: React.FC<ScoreCounterProps> = ({
 
     const progress = animatedValue.interpolate({
         inputRange: [0, maxScore],
-        outputRange: ['0%', '100%'],
+        outputRange: [0, 1],
     });
 
     return (
@@ -56,7 +56,10 @@ const ScoreCounter: React.FC<ScoreCounterProps> = ({
 
             <View style={styles.progressBar}>
                 <Animated.View
-                    style={[styles.progressFill, { width: progress }]}
+                    style={[styles.progressFill, {
+                        transform: [{ scaleX: progress }],
+                        transformOrigin: 'left'
+                    }]}
                 />
             </View>
         </View>
@@ -65,15 +68,15 @@ const ScoreCounter: React.FC<ScoreCounterProps> = ({
 
 const styles = StyleSheet.create({
     container: {
-        padding: 16,
+        paddingTop: 6,
         backgroundColor: 'rgba(255, 255, 255, 0.1)',
-        borderRadius: 16,
+        borderRadius: 6,
         marginVertical: 8,
     },
     scoreContainer: {
         flexDirection: 'row',
         alignItems: 'baseline',
-        marginBottom: 8,
+        marginBottom: 4,
     },
     scoreText: {
         fontSize: 32,

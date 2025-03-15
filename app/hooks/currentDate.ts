@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export const useCurrentDate = () => {
+const useCurrentDate = () => {
     const [currentDate, setCurrentDate] = useState<string>('');
 
     useEffect(() => {
@@ -26,3 +26,5 @@ export const useCurrentDate = () => {
 
     return currentDate;
 };
+
+export default useCurrentDate;

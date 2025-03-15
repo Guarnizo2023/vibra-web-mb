@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ActivityService } from '../../../services/api';
 import { ResponseDto } from '@/types/api';
 
-export const useActivities = (page = 1) => {
+const useActivities = (page = 1) => {
     return useQuery({
         queryKey: ['activities', page],
         queryFn: () => ActivityService.getActivityHistory(page),
@@ -13,6 +13,7 @@ export const useActivities = (page = 1) => {
         //getPreviousPageParam: (firstPage: any) => firstPage.hasPreviousPage ? firstPage.previousPage : undefined
     }) as unknown as any;
 };
+export default useActivities;
 
 export const useDailyActivity = () => {
     return useQuery({

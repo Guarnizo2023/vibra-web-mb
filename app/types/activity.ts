@@ -3,10 +3,13 @@ export interface Resource {
     url: string;
 }
 
-export interface Question {
+interface Question {
+    id: string;
     type: 'open' | 'multiple';
     url: string;
     questionText: string;
     _id: string;
     options: []
 }
+
+export default Question;

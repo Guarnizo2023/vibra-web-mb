@@ -1,22 +1,15 @@
-// app/(tabs)/one.tsx
 import useAuth from '@/hooks/useAuth';
-import { Text, TouchableOpacity, View, StyleSheet, ScrollView, Animated } from 'react-native';
+import { Animated, ScrollView, StyleSheet } from 'react-native';
 //import { useTailwind } from 'tailwind-rn';
-import { mockDashboardData } from '../../../utils/mockData';
+import { useEffect, useRef, useState } from 'react';
+import { useTailwind } from 'tailwind-rn';
 import CardComponent from '../ui/CardComponent';
-import UserRankingList from '../users/UserRankingList';
-import UploadFile from '../ui/UploadFile';
-import { useState, useRef, useEffect } from 'react';
-import ProgressBar from '../ui/ProgressBar';
-import ReproductorMedia from '../ui/ReproductorMedia';
-import GestureAnimate from '../ui/animation/GestureAnimate';
-import GesturePan from '../ui/animation/GesturePan';
-import GestureElasticMenu from '../ui/animation/GestureElasticMenu';
+import ProgressBarVibra from '../ui/ProgressBar';
+import CustomButton from '../ui/CustomButton';
 import FloatButton from '../ui/animation/FloatButton';
-import WelcomeScreen from '../ui/animation/WelcomeScreen';
 
 export default function TabOne() {
-    //const tailwind = useTailwind();
+    const tailwind = useTailwind();
     const { logout } = useAuth();
     const [animate, setAnimate] = useState(false);
     const animation = useRef(new Animated.Value(0)).current;
@@ -44,15 +37,15 @@ export default function TabOne() {
 
     return (
 
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={[styles.scrollView, tailwind('bg-gray-50')]}>
             <CardComponent />
-            <ProgressBar />
+            <ProgressBarVibra />
             {/*
+            <FloatButton />
             <WelcomeScreen navigation={undefined} />
             <View style={{ flex: 1, paddingHorizontal: 20, top: 0 }}>
                 <Text>Datos mockeados: {mockDashboardData.tabOne}</Text>
             <UploadFile />
-                <FloatButton />
                 <ReproductorMedia />
                 <View style={{ flex: 1, alignContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity onPress={() => setAnimate(true)}>
@@ -60,6 +53,7 @@ export default function TabOne() {
                     </TouchableOpacity>
                 </View>
             </View>*/}
+            <CustomButton title="Desconectar" variantColor="red" onPress={logout} />
         </ScrollView>
     );
 }
@@ -69,22 +63,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#EAEAEA',
         padding: 4,
         borderColor: 'transparent',
-    },
-    input: {
-        height: 40,
-        borderColor: 'white',
-        borderWidth: 1,
-        top: 0,
-        paddingHorizontal: 8,
-        width: 120,
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    box: {
-        marginTop: 20,
-        width: 10,
-        height: 10,
-        backgroundColor: '#FFFFFF',
     },
 });

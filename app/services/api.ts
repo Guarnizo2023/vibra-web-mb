@@ -68,7 +68,7 @@ export const ActivityService = {
     getDailyActivity: (): Promise<ActivityResponse> =>
         api.get<ActivityResponse>('/activities/daily/current').then(res => res.data),
     submitResponse: (activityId: string, userId: string, data: any) =>
-        api.post(`/activities/${activityId}/submit`, {
+        api.post(`/activities/${activityId}/${userId}/submit`, {
             params: {
                 id: activityId,
                 userId,

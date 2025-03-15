@@ -1,5 +1,5 @@
 import CustomButton from "@/components/ui/CustomButton";
-import { useUser } from "@/context/UserContext";
+import useUser from "@/context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";

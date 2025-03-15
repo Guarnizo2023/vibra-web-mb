@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 const IS_IOS = Platform.OS === 'ios';
 
-export const storage = {
+const storage = {
     // Almacenamiento seguro para datos sensibles (JWT)
     async setToken(value: string): Promise<void> {
         return SecureStore.setItemAsync('auth_token', value);
@@ -48,3 +48,5 @@ export const storage = {
         return this.setItem('queryCache', value);
     }
 };
+
+export default storage;
