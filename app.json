@@ -30,7 +30,7 @@
       [
         "expo-router",
         {
-          "origin": "http://192.168.101.72:8081",
+          "origin": "http://192.168.101.73:8081",
           "asyncRoutes": {
             "app": "./app/**/*.tsx"
           }

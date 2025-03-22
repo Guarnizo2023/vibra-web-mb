@@ -73,19 +73,19 @@ const DailyActivityScreen = () => {
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
 
-                    <Text style={[{ fontSize: 20, textAlign: 'center' }, tailwind('mb-2 font-semibold')]}>Emoción: {data.activity.emotion?.name}</Text>
-                    <ProgressBarII total={data.activity.resources?.length} current={currentStep} />
+                    <Text style={[{ fontSize: 20, textAlign: 'center' }, tailwind('mb-2 font-semibold')]}>Emoción: {data.activity?.emotion?.name}</Text>
+                    <ProgressBarII total={data.activity?.resources?.length} current={currentStep} />
                 </View>
                 <View style={styles.listContainer}>
                     <MediaPlayer
-                        resource={data.activity.resources[currentStep]}
-                        onComplete={() => currentStep < data.activity.resources?.length - 1 &&
+                        resource={data.activity?.resources[currentStep]}
+                        onComplete={() => currentStep < data.activity?.resources?.length - 1 &&
                             actions.nextStep()}
                     />
                 </View>
                 <View style={styles.buttonContainer}>
                     <QuestionSection
-                        questions={data.activity.questions[currentStep]}
+                        questions={data.activity?.questions[currentStep]}
                         onSubmit={handleSubmit}
                     />
                     <ScoreCounter
