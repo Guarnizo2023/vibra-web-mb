@@ -6,7 +6,7 @@ module.exports = {
   content: [
     "./app/index.ts",
     "./app/**/*.{js,jsx,ts,tsx}",
-    "./app/components/**/*.{js,jsx,ts,tsx}"
+    "./app/features/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
     screens: {

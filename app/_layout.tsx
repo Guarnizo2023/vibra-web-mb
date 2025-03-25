@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as Notifications from 'expo-notifications';
 import { router, Slot, useRouter } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
@@ -8,8 +9,7 @@ import { TailwindProvider } from "tailwind-rn";
 import '../global.css';
 import utilities from "../tailwind.json";
 import { UserProvider } from './context/UserContext';
-import useAuth from "./hooks/useAuth";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import useAuth from "./shared/hooks/useAuth";
 
 function useNotificationObserver() {
   useEffect(() => {
@@ -51,10 +51,11 @@ export default function RootLayout() {
     checkAuth().then((authenticated: any) => {
       console.log("Authenticated:", authenticated);
       if (isAuthenticated) {
-        router.replace('/components/(tabs)/one');
-        //router.replace('/components/ui/RankingScreen');
+        //router.replace('/features/(tabs)/one');
+        //router.replace('/features/ui/RankingScreen');
       } else {
         router.replace('/');
+        //router.replace('/features/(tabs)/one');
       }
     });
   }, []);

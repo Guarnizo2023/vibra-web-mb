@@ -7,8 +7,8 @@ declare module 'tailwind-rn' {
     }
 
     interface Props {
-        children: React.ReactNode;
         utilities: Record<string, { style: Record<string, unknown> }>;
+        children: React.ReactNode;
     }
 
     interface TailwindProvider {

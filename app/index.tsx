@@ -1,13 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useRef, useState } from 'react';
-import { ImageBackground, Platform, StyleSheet, Text, View } from 'react-native';
-import LoginForm from './components/login/LoginForm';
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { SchedulableTriggerInputTypes } from 'expo-notifications';
-import Constants from 'expo-constants';
-import LocalStorageComponent from './components/ui/LocalStorageComponent';
-import { FlatListComponente } from './components/ui/FlatList';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useRef, useState } from 'react';
+import { ImageBackground, Platform, StyleSheet, Text, View } from 'react-native';
+import LoginForm from './features/login/LoginForm';
 // Import the global.css file in the index.js file:
 import '../global.css';
 //import messaging from '@react-native-firebase/messaging';
