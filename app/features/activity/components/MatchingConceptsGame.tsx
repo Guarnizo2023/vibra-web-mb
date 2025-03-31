@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing, Alert, ScrollView, Platform } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import { useSubmitResponse } from '../hooks/activity';
 import useUser from '@/context/UserContext';
@@ -7,6 +7,7 @@ import useActivityStore from '@/shared/store/activity.store';
 import ScoreCounter from './ScoreCounter';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import CustomButton from '@/shared/components/ui/CustomButton';
 
 // Component types
 interface MatchingConceptsGameProps {
@@ -101,7 +102,7 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
         // Create array with all concepts and their matches
         const allItems: ConceptItem[] = [];
 
-        // Agregar conceptos
+        // Add concepts
         conceptPairs.forEach(pair => {
             allItems.push({
                 id: `concept-${pair.id}`,
@@ -113,7 +114,7 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
                 position: new Animated.ValueXY({ x: 0, y: 0 }),
             });
 
-            // Agregar coincidencias
+            // Add matches
             allItems.push({
                 id: `match-${pair.id}`,
                 text: pair.match,
@@ -125,7 +126,7 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
             });
         });
 
-        // Mezclar los elementos
+        // Mix the elements
         const shuffledItems = shuffleArray(allItems);
         setItems(shuffledItems);
         setStartTime(Date.now());
@@ -145,7 +146,7 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
     const handleItemPress = (item: ConceptItem) => {
         if (gameComplete || item.matched) return;
 
-        // Animar el elemento seleccionado
+        // Animate the selected element
         Animated.sequence([
             Animated.timing(item.position, {
                 toValue: { x: 5, y: 0 },
@@ -190,12 +191,12 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
             const newMatchedPairs = [...matchedPairs, item.originalId];
             setMatchedPairs(newMatchedPairs);
 
-            // Actualizar puntuación
+            // Update score
             const pairScore = 50;
             const newScore = score + pairScore;
             setScore(newScore);
 
-            // Animar puntuación
+            // Animate punctuation
             Animated.sequence([
                 Animated.timing(scoreAnim, {
                     toValue: 1,
@@ -209,7 +210,7 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
                 }),
             ]).start();
 
-            // Actualizar elementos
+            // Update elements
             const updatedItems = items.map(i =>
                 i.id === item.id || i.id === selectedItem.id
                     ? { ...i, selected: false, matched: true }
@@ -218,7 +219,7 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
             setItems(updatedItems);
             setSelectedItem(null);
         } else {
-            // No coinciden, animar sacudida
+            // They do not match, animate shake
             Animated.sequence([
                 Animated.timing(shakeAnim, {
                     toValue: 1,
@@ -291,18 +292,24 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
         }
 
         // Show completion message and redirect user
-        Alert.alert(
-            '¡Actividad completada!',
-            `Has emparejado ${matchedPairs.length} de ${conceptPairs.length} conceptos.\nPuntuación: ${finalScore}\nTiempo: ${formatTime(finalTimeSpent)}`,
-            [{
-                text: 'Finalizar',
-                onPress: () => {
-                    // Reiniciar el estado de la actividad y redirigir al usuario
-                    actions.reset();
-                    router.push('/features/(tabs)/one');
-                }
-            }]
-        );
+        if (Platform.OS === 'web') {
+            actions.nextActivityType();
+            actions.reset();
+            router.push('/features/(tabs)/one');
+        } else {
+            Alert.alert(
+                '¡Actividad completada!',
+                `Has emparejado ${matchedPairs.length} de ${conceptPairs.length} conceptos.\nPuntuación: ${finalScore}\nTiempo: ${formatTime(finalTimeSpent)}`,
+                [{
+                    text: 'Finalizar',
+                    onPress: () => {
+                        // Reiniciar el estado de la actividad y redirigir al usuario
+                        actions.reset();
+                        router.push('/features/(tabs)/one');
+                    }
+                }]
+            );
+        }
     };
 
     // Score scale animation
@@ -371,48 +378,58 @@ const MatchingConceptsGame: React.FC<MatchingConceptsGameProps> = ({
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <View style={styles.timerContainer}>
-                    <MaterialCommunityIcons name="clock-outline" size={24} color="#333" />
-                    <Text style={styles.timerText}>{formatTime(timeLimit - timeSpent)}</Text>
+        <>
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <View style={styles.timerContainer}>
+                        <MaterialCommunityIcons name="clock-outline" size={24} color="#333" />
+                        <Text style={styles.timerText}>{formatTime(timeLimit - timeSpent)}</Text>
+                    </View>
+
+                    <Animated.View
+                        style={{
+                            transform: [
+                                {
+                                    scale: scoreAnim.interpolate({
+                                        inputRange: [0, 0.5, 1],
+                                        outputRange: [1, 1.2, 1]
+                                    })
+                                }
+                            ]
+                        }}
+                    >
+                        <ScoreCounter currentScore={score} maxScore={conceptPairs.length * 50 + 100} />
+                    </Animated.View>
                 </View>
 
-                {gameComplete && (<View style={styles.infoContainer}>
+                <Text style={styles.instructions}>
+                    Empareja cada concepto con su definición correspondiente
+                </Text>
+
+                <ScrollView style={styles.gameArea}>
+                    <View style={styles.itemsContainer}>
+                        {items.map(item => renderItem(item))}
+                    </View>
+                </ScrollView>
+
+            </View>
+
+            {!gameComplete &&
+                <View style={[styles.infoContainer, tailwind('min-w-full')]}>
                     <Animated.View style={{ transform: [{ scale: scoreScale }] }}>
                         <View style={styles.completionBanner}>
                             <Text style={styles.completionText}>¡Actividad Completada!</Text>
                         </View>
                         <Text style={styles.scoreText}>Puntuación: {score}</Text>
+
+                        <CustomButton
+                            title='Continuar'
+                            neonEffect={true}
+                            onPress={endGame}
+                        />
                     </Animated.View>
-                </View>)}
-
-                <Animated.View
-                    style={{
-                        transform: [
-                            {
-                                scale: scoreAnim.interpolate({
-                                    inputRange: [0, 0.5, 1],
-                                    outputRange: [1, 1.2, 1]
-                                })
-                            }
-                        ]
-                    }}
-                >
-                    <ScoreCounter currentScore={score} maxScore={conceptPairs.length * 50 + 100} />
-                </Animated.View>
-            </View>
-
-            <Text style={styles.instructions}>
-                Empareja cada concepto con su definición correspondiente
-            </Text>
-
-            <ScrollView style={styles.gameArea}>
-                <View style={styles.itemsContainer}>
-                    {items.map(item => renderItem(item))}
-                </View>
-            </ScrollView>
-        </View>
+                </View>}
+        </>
     );
 };
 
@@ -430,9 +447,8 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     infoContainer: {
-        flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 8,
+        marginBottom: 8
     },
     timerContainer: {
         flexDirection: 'row',
@@ -449,6 +465,13 @@ const styles = StyleSheet.create({
         marginLeft: 8,
         color: '#333',
     },
+    scoreText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#4CAF50',
+        marginTop: 16,
+        marginBottom: 8,
+    },
     instructions: {
         fontSize: 16,
         textAlign: 'center',
@@ -463,13 +486,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
-        alignItems: 'flex-start',
+        alignItems: 'flex-end',
     },
     item: {
-        width: '45%',
-        marginVertical: 8,
-        padding: 16,
-        borderRadius: 8,
+        width: 100,
+        marginVertical: 4,
+        padding: 6,
+        borderRadius: 4,
         elevation: 3,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -520,25 +543,25 @@ const styles = StyleSheet.create({
         right: 8,
     },
     completionBanner: {
-        position: 'absolute',
+        position: 'relative',
         bottom: 20,
-        left: 20,
-        right: 20,
         backgroundColor: 'rgba(76, 175, 80, 0.9)',
-        padding: 16,
-        borderRadius: 8,
+        padding: 6,
+        borderRadius: 4,
         alignItems: 'center',
-        elevation: 5,
+        width: '100%',
+        textAlign: 'center',
+        top: 10,
+        paddingVertical: 10,
     },
     completionText: {
         fontSize: 18,
         fontWeight: 'bold',
         color: 'white',
-        marginBottom: 8,
-    },
-    scoreText: {
-        fontSize: 16,
-        color: 'white',
+        marginBottom: 18,
+        width: '100%',
+        top: 10,
+        textAlign: 'center',
     },
 });
 

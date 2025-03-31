@@ -51,12 +51,9 @@ export default function RootLayout() {
     checkAuth().then((authenticated: any) => {
       console.log("Authenticated:", authenticated);
       if (isAuthenticated) {
-        //router.replace('/features/(tabs)/one');
-        //router.replace('/features/ui/RankingScreen');
+        router.replace('/features/(tabs)/one');
       } else {
         router.replace('/');
-        //router.replace('/features/(tabs)/one');
-        //router.replace('/features/test/TestListScreen');
       }
     });
   }, []);

@@ -6,6 +6,7 @@ import useUser from '@/context/UserContext';
 import useActivityStore from '@/shared/store/activity.store';
 import ScoreCounter from './ScoreCounter';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import CustomButton from '@/shared/components/ui/CustomButton';
 
 // Component Types
 interface WordSearchGameProps {
@@ -441,11 +442,7 @@ const WordSearchGame: React.FC<WordSearchGameProps> = ({
                     <MaterialCommunityIcons name="clock-outline" size={24} color="#333" />
                     <Text style={styles.timerText}>{formatTime(timeLimit - timeSpent)}</Text>
                 </View>
-                <View style={styles.infoContainer}>
-                    <Animated.View style={{ transform: [{ scale: scoreScale }] }}>
-                        <Text style={styles.scoreText}>Puntuación: {score}</Text>
-                    </Animated.View>
-                </View>
+
                 <Animated.View
                     style={{
                         transform: [
@@ -460,7 +457,8 @@ const WordSearchGame: React.FC<WordSearchGameProps> = ({
                 >
                     <ScoreCounter currentScore={score} maxScore={words.length * 10 + 100} />
                 </Animated.View>
-
+            </View>
+            <View style={styles.gridContainer}>
                 <View style={styles.wordsContainer}>
                     <Text style={styles.wordsTitle}>Palabras a encontrar:</Text>
                     <View style={styles.wordsList}>
@@ -474,6 +472,12 @@ const WordSearchGame: React.FC<WordSearchGameProps> = ({
                         ))}
                     </View>
                 </View>
+            </View>
+
+            <View style={styles.gridContainerInfo}>
+                <Text style={styles.instructions}>
+                    Encuentra todas las palabras en el tiempo limitado
+                </Text>
             </View>
 
             <Animated.View style={[styles.gridContainer, { transform: [{ scale: gridScale }] }]}>
@@ -506,13 +510,19 @@ const WordSearchGame: React.FC<WordSearchGameProps> = ({
                 ))}
             </Animated.View>
 
-            {gameComplete && (
-                <TouchableOpacity
+            <View style={styles.infoContainer}>
+                <Animated.View style={{ transform: [{ scale: scoreScale }] }}>
+                    <Text style={styles.scoreText}>Puntuación: {score}</Text>
+                </Animated.View>
+            </View>
+
+            {!gameComplete && (
+                <CustomButton
+                    title='Continuar'
+                    neonEffect={true}
                     style={styles.resetButton}
-                    onPress={initializeGame}
-                >
-                    <Text style={styles.resetButtonText}>Jugar de nuevo</Text>
-                </TouchableOpacity>
+                    onPress={endGame}
+                />
             )}
         </View>
     );
@@ -523,8 +533,12 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 16,
         backgroundColor: '#F5F5F5',
+        borderRadius: 8,
     },
     header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 16,
     },
     infoContainer: {
@@ -532,18 +546,35 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 8,
     },
-    timeText: {
-        fontSize: 16,
+    timerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 20,
+        elevation: 2,
+    },
+    timerText: {
+        fontSize: 18,
         fontWeight: 'bold',
+        marginLeft: 8,
         color: '#333',
     },
     scoreText: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#4CAF50',
+        marginTop: 8,
+    },
+    instructions: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 16,
+        color: '#555',
+        fontWeight: '500',
     },
     wordsContainer: {
-        marginTop: 8,
         padding: 8,
         backgroundColor: '#FFFFFF',
         borderRadius: 8,
@@ -572,19 +603,33 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     gridContainer: {
+        marginTop: 16,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#FFFFFF',
-        borderRadius: 8,
-        padding: 8,
+        borderRadius: 4,
+        padding: 4,
         elevation: 3,
+    },
+    gridContainerInfo: {
+        marginTop: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FFFFCC',
+        borderRadius: 8,
+        padding: 4,
+        elevation: 3,
+        fontSize: 14,
+        color: '#333',
+        fontWeight: '500',
+        textAlign: 'center',
     },
     row: {
         flexDirection: 'row',
     },
     cell: {
-        width: 30,
-        height: 30,
+        width: 28,
+        height: 28,
         justifyContent: 'center',
         alignItems: 'center',
         margin: 2,
@@ -610,21 +655,6 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontWeight: 'bold',
         fontSize: 16,
-    },
-    timerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 20,
-        elevation: 2,
-    },
-    timerText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginLeft: 8,
-        color: '#333',
     },
 });
 
