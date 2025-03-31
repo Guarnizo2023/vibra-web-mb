@@ -14,6 +14,8 @@ type Props = {
     iconPosition?: 'left' | 'right';
     iconSize?: number;
     disabled?: boolean;
+    buttonType?: 'standard' | 'iconTop';
+    fullWidth?: boolean;
 };
 
 const CustomButton = ({
@@ -25,7 +27,9 @@ const CustomButton = ({
     icon,
     iconPosition = 'left',
     iconSize = 24,
-    disabled = false
+    disabled = false,
+    buttonType = 'standard',
+    fullWidth = false
 }: Props) => {
     const [isPressed, setIsPressed] = useState(false);
     const tailwind = useTailwind();
@@ -59,7 +63,7 @@ const CustomButton = ({
         const colorMap: any = {
             'blue': ['#0066FF', '#0066FF', '#0066FF', '#0066FF', '#00CCFF'],
             'red': ['#FF0000', '#FF0000', '#FF0000', '#FF6666'],
-            'green': ['#00CC00', '#00CC00', '#00CC00', '#66FF66'],
+            'green': ['#00CC00', '#00CC00', '#00CC00', '#00CC00', '#00CC00', '#66FF66'],
             'purple': ['#6600CC', '#CC66FF'],
             'orange': ['#FF6600', '#FFCC00'],
             'yellow': ['#FFCC00', '#FFFF66'],
@@ -71,6 +75,17 @@ const CustomButton = ({
 
     // Render the button content with or without icon
     const renderButtonContent = () => {
+        if (buttonType === 'iconTop') {
+            return (
+                <View style={styles.iconTopContainer}>
+                    {icon && (
+                        <MaterialIcons name={icon} size={iconSize * 1.5} color="white" style={styles.iconTop} />
+                    )}
+                    <Text style={[styles.buttonTextIconTop, tailwind('text-white font-bold text-center')]}>{title}</Text>
+                </View>
+            );
+        }
+
         return (
             <View style={styles.contentContainer}>
                 {icon && iconPosition === 'left' && (
@@ -93,7 +108,9 @@ const CustomButton = ({
                     styles.button,
                     isPressed ? styles.buttonPressed : styles.buttonNormal,
                     tailwind(`bg-${variantColor}-500 p-2 mx-2 rounded-md items-center text-center justify-between`),
-                    disabled && styles.buttonDisabled
+                    disabled && styles.buttonDisabled,
+                    fullWidth && styles.fullWidth,
+                    buttonType === 'iconTop' && styles.iconTopButton
                 ]}
                 onPressIn={() => !disabled && setIsPressed(true)}
                 onPressOut={() => !disabled && setIsPressed(false)}
@@ -119,7 +136,9 @@ const CustomButton = ({
                     style,
                     styles.button,
                     styles.neonButton,
-                    disabled && styles.buttonDisabled
+                    disabled && styles.buttonDisabled,
+                    fullWidth && styles.fullWidth,
+                    buttonType === 'iconTop' && styles.iconTopButton
                 ]}
                 onPressIn={() => !disabled && setIsPressed(true)}
                 onPressOut={() => !disabled && setIsPressed(false)}
@@ -152,6 +171,13 @@ const styles = StyleSheet.create({
         width: 'auto',
         overflow: 'hidden',
         height: 50,
+    },
+    fullWidth: {
+        flex: 1,
+    },
+    iconTopButton: {
+        height: 80,
+        backgroundColor: 'transparent',
     },
     buttonNormal: {
         backgroundColor: '#007AFF',
@@ -201,6 +227,24 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'transparent',
+    },
+    iconTopContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 8,
+        bottom: 8,
+    },
+    iconTop: {
+        marginBottom: 0,
+    },
+    buttonTextIconTop: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 14,
+        textAlign: 'center',
+        paddingBottom: 30,
     },
 });
 

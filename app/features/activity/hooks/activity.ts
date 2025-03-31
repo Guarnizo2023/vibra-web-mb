@@ -1,7 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ActivityService } from '../../../shared/services/api/api';
-import { ResponseDto } from '@/shared/types/api';
 import useUser from '@/context/UserContext';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ActivityService } from '../../../shared/services/api/api';
 
 const useActivities = (page = 1) => {
     const { user } = useUser();

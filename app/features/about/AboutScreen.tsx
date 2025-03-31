@@ -17,7 +17,7 @@ const sponsors = [
         id: 2,
         name: 'SEMILLERO',
         logo: require('../../assets/sponsors/logo_semillero.jpg'),
-        description: 'Semillero 1',
+        description: 'Semillero de Investigación',
         fullDescription: 'Semillero de investigación dedicado al desarrollo de tecnologías innovadoras.'
     },
     {
@@ -31,18 +31,18 @@ const sponsors = [
 
 const developers = [
     {
-        id: 1,
-        name: 'Yovany Suárez Silva',
-        role: 'Software engineer and Lead developer',
-        avatar: require('../../assets/sponsors/6803296.jpeg'),
-        bio: 'Ingeniero de software con amplia experiencia en desarrollo de aplicaciones móviles y web. Líder técnico del proyecto Vibra.'
-    },
-    {
         id: 2,
         name: 'Ermes Guarnizo Motta',
         role: 'Designer and Product Owner',
         avatar: require('../../assets/sponsors/ermes_guarnizo_motta.jpeg'),
         bio: 'Diseñador UX/UI con experiencia en la creación de experiencias de usuario intuitivas y atractivas. Product Owner del proyecto Vibra.'
+    },
+    {
+        id: 1,
+        name: 'Yovany Suárez Silva',
+        role: 'Software engineer and Lead developer',
+        avatar: require('../../assets/sponsors/6803296.jpeg'),
+        bio: 'Ingeniero de software con amplia experiencia en desarrollo de aplicaciones móviles y web. Líder técnico del proyecto Vibra.'
     }
 ];
 
@@ -126,12 +126,14 @@ const AboutScreen = () => {
             </ScrollView>
 
             <CustomButton
-                style={[{ marginBottom: 10 }, tailwind('mx-4 min-w-full')]}
-                variantColor='red'
-                icon='arrow-back'
-                neonEffect={true}
                 title="Ir atras"
                 onPress={() => router.back()}
+                style={{ fontSize: 22, marginHorizontal: 20, marginBottom: 20 }}
+                icon={"arrow-right"}
+                iconPosition="right"
+                iconSize={24}
+                neonEffect={true}
+                variantColor="red"
             />
 
             <Modal
@@ -159,10 +161,14 @@ const AboutScreen = () => {
                                     </>
                                 )}
                                 <CustomButton
-                                    style={styles.modalButton}
-                                    variantColor='blue'
-                                    title="Cerrar"
+                                    title="Ir atras"
                                     onPress={() => setModalVisible(false)}
+                                    style={{ fontSize: 22 }}
+                                    icon={"arrow-right"}
+                                    iconPosition="right"
+                                    iconSize={24}
+                                    neonEffect={true}
+                                    variantColor="red"
                                 />
                             </>
                         )}
@@ -208,7 +214,9 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: 'white',
         padding: 6,
-        borderRadius: 10,
+        paddingTop: 12,
+        paddingBottom: 20,
+        borderRadius: 20,
         margin: 6,
         width: 160,
         alignItems: 'center',

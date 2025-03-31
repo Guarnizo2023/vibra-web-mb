@@ -1637,9 +1637,19 @@
             "borderTopRightRadius": 8
         }
     },
+    "h-24": {
+        "style": {
+            "height": 96
+        }
+    },
     "h-48": {
         "style": {
             "height": 192
+        }
+    },
+    "h-60": {
+        "style": {
+            "height": 240
         }
     },
     "shadow-sm": {
@@ -1820,6 +1830,11 @@
         "style": {
             "minWidth": "100%",
             "width": "100%"
+        }
+    },
+    "flex-grow": {
+        "style": {
+            "flexGrow": 1
         }
     }
 }

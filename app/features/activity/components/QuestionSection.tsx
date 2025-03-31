@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingVi
 import Question from '../../../shared/types/activity';
 import { Ionicons } from '@expo/vector-icons';
 import CustomButton from '@/shared/components/ui/CustomButton';
+import useActivityStore from '@/shared/store/activity.store';
 
 interface QuestionSectionProps {
     questions: Question;
@@ -13,6 +14,8 @@ const QuestionSection: React.FC<QuestionSectionProps> = ({ questions, onSubmit }
     const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
     const [openAnswer, setOpenAnswer] = useState('');
     const [error, setError] = useState('');
+    const { actions } = useActivityStore();
+    const startTime = Date.now();
 
     useEffect(() => {
         setSelectedAnswers({});
@@ -34,6 +37,18 @@ const QuestionSection: React.FC<QuestionSectionProps> = ({ questions, onSubmit }
         const answers = questions?.type === 'multiple'
             ? selectedAnswers
             : { [questions?.id!]: openAnswer };
+
+        const responseTime = (Date.now() - startTime) / 1000; // Convertir a segundos
+        const isCorrect = questions?.type === 'multiple'
+            ? selectedAnswers[questions?.id!] === questions?.correctAnswer
+            : openAnswer.toLowerCase().trim() === questions?.correctAnswer?.toLowerCase().trim();
+
+        actions.addResponse({
+            questionId: questions?.id!,
+            isCorrect,
+            points: isCorrect ? 1 : 0,
+            responseTime
+        });
 
         console.log("Answers:", answers);
         onSubmit(answers);

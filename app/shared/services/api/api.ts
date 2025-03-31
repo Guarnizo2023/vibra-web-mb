@@ -2,11 +2,10 @@
  * @fileoverview Axios instance configuration for API communication
  * @module services/api
  */
-import { Platform } from 'react-native';
-import storage from '../../store/storage';
-import axios from 'axios';
-import config from '../../../../config/env.json';
 import ActivityResponse, { PaginatedResponse } from '@/shared/types/api';
+import axios from 'axios';
+import { Platform } from 'react-native';
+import config from '../../../../config/env.json';
 
 /**
  * Base URL for the API obtained from environment configuration

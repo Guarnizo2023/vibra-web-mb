@@ -1,16 +1,21 @@
 import { create } from 'zustand';
 
+type ActivityType = 'Question' | 'WordSearch' | 'MatchingConcepts';
+
 interface ActivityState {
     currentStep: number;
     responses: Record<string, any>[];
     mediaStatus: 'loading' | 'ready' | 'error';
     startTime: number;
+    activityType: ActivityType;
     actions: {
         initialize: (steps: number) => void;
         nextStep: () => void;
         prevStep: () => void;
         addResponse: (response: any) => void;
         reset: () => void;
+        setActivityType: (type: ActivityType) => void;
+        nextActivityType: () => void;
     };
 }
 
@@ -19,6 +24,7 @@ const useActivityStore = create<ActivityState>()((set) => ({
     responses: [],
     mediaStatus: 'loading',
     startTime: Date.now(),
+    activityType: 'Question',
     actions: {
         initialize: (steps: number) => set({ currentStep: 0, responses: new Array(steps) }),
         nextStep: () => set((state) => ({
@@ -35,7 +41,23 @@ const useActivityStore = create<ActivityState>()((set) => ({
             currentStep: 0,
             responses: [],
             mediaStatus: 'loading',
-            startTime: Date.now()
+            startTime: Date.now(),
+            activityType: 'Question'
+        }),
+        setActivityType: (type: ActivityType) => set({
+            activityType: type
+        }),
+        nextActivityType: () => set((state) => {
+            const currentType = state.activityType;
+            let nextType: ActivityType = currentType;
+
+            if (currentType === 'Question') {
+                nextType = 'WordSearch';
+            } else if (currentType === 'WordSearch') {
+                nextType = 'MatchingConcepts';
+            }
+
+            return { activityType: nextType };
         })
     },
 }));

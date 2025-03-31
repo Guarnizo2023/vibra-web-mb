@@ -28,7 +28,7 @@ const LoginForm: React.FC = () => {
     const [email, setEmail] = useState('yov@y.com');
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [isEnabled, setIsEnabled] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(true);
     const router = useRouter();
     const { login, isAuthenticated } = useAuth();
     const { setUser } = useUser();
@@ -162,17 +162,52 @@ const LoginForm: React.FC = () => {
                     onValueChange={toggleSwitch}
                 />
             </View>}
-            {!isEnabled && <CustomButton
-                neonEffect={true}
-                title={loading ? ' Cargando...' : ' Iniciar Sesión'}
-                variantColor='blue'
-                onPress={() => {
-                    handleLogin();
-                }}
-                icon='login'
-                disabled={loading}
-                style={tailwind('min-w-full mb-3 my-2')}
-            />}
+            {!isEnabled && <View style={tailwind('flex-row h-24 justify-center w-full mb-3 my-2')}>
+                <CustomButton
+                    neonEffect={true}
+                    title={loading ? 'Cargando...' : 'Conectarse'}
+                    variantColor='blue'
+                    onPress={() => {
+                        handleLogin();
+                    }}
+                    icon='login'
+                    disabled={loading}
+                    buttonType='iconTop'
+                    iconSize={32}
+                    fullWidth={false}
+                    style={[{ flex: 1 }, tailwind('w-full text-xl text-white')]}
+                />
+
+                <CustomButton
+                    neonEffect={true}
+                    title={loading ? 'Cargando...' : 'Registrarse'}
+                    variantColor='orange'
+                    onPress={() => {
+                        handleRegister();
+                    }}
+                    icon='person-add'
+                    disabled={loading}
+                    buttonType='iconTop'
+                    iconSize={32}
+                    fullWidth={false}
+                    style={[{ flex: 1 }, tailwind('w-full text-xl text-white')]}
+                />
+
+                <CustomButton
+                    neonEffect={true}
+                    title={loading ? 'Cargando...' : 'Acerca de ...'}
+                    variantColor='purple'
+                    onPress={() => {
+                        router.push('/features/about/AboutScreen');
+                    }}
+                    icon='tag'
+                    disabled={loading}
+                    buttonType='iconTop'
+                    iconSize={32}
+                    fullWidth={true}
+                    style={[{ flex: 1 }, tailwind('w-full text-xl text-white')]}
+                />
+            </View>}
 
             {isEnabled && <TouchableOpacity
                 style={tailwind('w-full bg-blue-500 p-3 rounded-md items-center mb-4 mt-4')}
@@ -184,33 +219,10 @@ const LoginForm: React.FC = () => {
                     {loading ? 'Cargando...' : 'Continuar'}
                 </Text>
             </TouchableOpacity>}
-            <CustomButton
-                neonEffect={true}
-                title={loading ? 'Cargando...' : 'Registrarse'}
-                variantColor='orange'
-                onPress={() => {
-                    handleRegister();
-                }}
-                icon='person-add'
-                disabled={loading}
-                style={tailwind('min-w-full')}
-            />
 
             <Text style={[styles.link, tailwind('mt-6 mb-4')]} onPress={() => setModalVisible(true)}>
                 ¿Olvidaste tu contraseña?
             </Text>
-
-            <CustomButton
-                neonEffect={true}
-                title={loading ? 'Cargando...' : 'Acerca de...'}
-                variantColor='purple'
-                onPress={() => {
-                    router.push('/features/about/AboutScreen');
-                }}
-                icon='tag'
-                disabled={loading}
-                style={tailwind('min-w-full')}
-            />
 
             <Modal
                 animationType="slide"

@@ -6,6 +6,7 @@ import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import CustomButton from '../../shared/components/ui/CustomButton';
 const mainLogo = require('../../assets/logo-vibra.png');
+const logoUnad = require('../../assets/sponsors/logo_unad.png');
 
 export default function TabsLayout() {
     const tailwind = useTailwind();
@@ -37,21 +38,18 @@ export default function TabsLayout() {
     return (
         <View style={{ flex: 1 }}>
             <StatusBar style={Platform.OS == 'android' ? 'dark' : 'inverted'} backgroundColor='#EAEAEA' />
-            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, marginBottom: -40, top: -14 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, marginBottom: 6, top: 4 }}>
                 <Image
                     source={mainLogo}
                     style={{ width: 100, height: 100, marginTop: Platform.OS == 'android' ? 0 : 16 }}
                 />
-                <Text style={[{ paddingLeft: 10, paddingTop: Platform.OS == 'ios' || Platform.OS == 'android' ? 25 : 0, top: -50 }, tailwind("text-6xl text-white")]}> Vibra </Text>
-                <CustomButton
-                    neonEffect={true}
-                    icon="link-off"
-                    variantColor='blue'
-                    title="Desconectar"
-                    style={[{ top: -44, left: -10 }, tailwind("text-xl text-white")]}
-                    onPress={logout}
+                <Text style={[{ paddingLeft: 10, paddingTop: Platform.OS == 'ios' || Platform.OS == 'android' ? 25 : 0, top: 4 }, tailwind("text-6xl text-white")]}>
+                    Vibra </Text>
+
+                <Image
+                    source={logoUnad}
+                    style={{ width: 100, height: 56, marginTop: Platform.OS == 'android' ? 0 : -46 }}
                 />
-                {Platform.OS == 'ios' || Platform.OS == 'android' && <Text style={[{ paddingRight: -10, paddingTop: 50, fontStyle: 'italic', color: '#EAEAEA' }, tailwind("text-xl text-white")]}> Emociones </Text>}
             </View>
             <Tabs screenOptions={{
                 headerShown: false,
