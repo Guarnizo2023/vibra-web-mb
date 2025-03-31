@@ -28,10 +28,6 @@ const ActivityHistoryList = () => {
         );
     }
 
-
-
-    console.log('activities', activities);
-
     return (
         <View style={{ marginHorizontal: 20 }} >
             <SearchInput

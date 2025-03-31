@@ -37,21 +37,38 @@ const ScoreCounter: React.FC<ScoreCounterProps> = ({
         ]).start();
     }, [currentScore]);
 
-    const progress = animatedValue.interpolate({
-        inputRange: [0, maxScore],
-        outputRange: [0, 1],
-    });
+    // Crear un valor animado para la barra de progreso
+    const progress = Animated.multiply(
+        Animated.divide(animatedValue, new Animated.Value(maxScore)),
+        new Animated.Value(1)
+    );
+
+    // Crear un componente de texto formateado que muestra el valor animado
+    const AnimatedTextWithFormat = () => {
+        const [formattedValue, setFormattedValue] = React.useState(currentScore.toFixed(2));
+
+        useEffect(() => {
+            const listener = animatedValue.addListener(({ value }) => {
+                setFormattedValue(value.toFixed(2));
+            });
+
+            return () => {
+                animatedValue.removeListener(listener);
+            };
+        }, []);
+
+        return (
+            <Animated.Text style={[styles.scoreText, { transform: [{ scale: scaleAnim }] }]}>
+                {formattedValue}
+            </Animated.Text>
+        );
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.scoreContainer}>
-                <Animated.Text style={[styles.scoreText, { transform: [{ scale: scaleAnim }] }]}>
-                    {animatedValue.interpolate({
-                        inputRange: [0, maxScore],
-                        outputRange: ['0', maxScore.toString()],
-                    })}
-                </Animated.Text>
-                <Text style={styles.maxScoreText}>/{maxScore}</Text>
+                <AnimatedTextWithFormat />
+                <Text style={styles.maxScoreText}>/{typeof maxScore === 'number' ? maxScore.toFixed(2) : maxScore}</Text>
             </View>
 
             <View style={styles.progressBar}>

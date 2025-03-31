@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import { Ionicons } from '@expo/vector-icons';
+import CustomButton from '../../components/ui/CustomButton';
 
 interface ErrorScreenProps {
     message?: string;
@@ -30,14 +31,17 @@ const ErrorScreen: React.FC<ErrorScreenProps> = ({
                 </Text>
 
                 {onRetry && (
-                    <TouchableOpacity
+                    <CustomButton
+                        icon={<Ionicons name="refresh" size={24} color="white" />}
+                        iconPosition="left"
+                        iconSize={24}
+                        style={tailwind('m-0')}
+                        neonEffect={true}
+                        title="Intentar de nuevo"
+                        variantColor="blue"
                         onPress={onRetry}
-                        style={tailwind('bg-blue-500 py-3 px-6 rounded-lg w-full')}
-                    >
-                        <Text style={tailwind('text-white text-center font-semibold')}>
-                            Intentar de nuevo
-                        </Text>
-                    </TouchableOpacity>
+                        fullWidth={true}
+                    />
                 )}
             </View>
         </View>

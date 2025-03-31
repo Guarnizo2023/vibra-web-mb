@@ -3,13 +3,18 @@ export interface Resource {
     url: string;
 }
 
+export interface TypeQuestion {
+    type: 'Question' | 'WordSearch' | 'MatchingConcepts';
+}
+
 interface Question {
     id: string;
     type: 'open' | 'multiple';
     url: string;
     questionText: string;
     _id: string;
-    options: []
+    options: [];
+    correctAnswer: string;
 }
 
 export default Question;

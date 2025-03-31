@@ -56,6 +56,7 @@ export default function RootLayout() {
       } else {
         router.replace('/');
         //router.replace('/features/(tabs)/one');
+        //router.replace('/features/test/TestListScreen');
       }
     });
   }, []);

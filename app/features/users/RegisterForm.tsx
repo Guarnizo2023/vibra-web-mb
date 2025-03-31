@@ -6,6 +6,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useTailwind } from 'tailwind-rn';
 import api from '../../shared/services/api/api';
 import CustomButton from '@/shared/components/ui/CustomButton';
+import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const RegisterForm = () => {
     const tailwind = useTailwind();
@@ -97,129 +99,188 @@ const RegisterForm = () => {
         <SafeAreaProvider>
             <SafeAreaView style={styles.container} >
                 <ScrollView style={styles.scrollView}>
-                    <Text style={tailwind('text-2xl font-bold text-center mb-2 text-white mt-4')}>
-                        <Image
-                            source={require('../../assets/favicon.png')} // Cambia la ruta a tu ícono SVG
-                            style={tailwind('w-4 h-4 ms-2.5 rtl:rotate-[270deg] mr-4 text-center')}
-                        />
-                        Registro de usuario
-                    </Text>
-                    <Text style={tailwind('text-10 font-bold text-left mb-1 text-white mt-2')}>
-                        Nombre de usuario
-                    </Text>
-                    <TextInput
-                        style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-2 my-1 bg-white')]}
-                        placeholder="Username"
-                        value={username}
-                        onChangeText={setUsername}
-                    />
-                    <Text style={tailwind('text-10 font-bold text-left mb-0 text-white mt-2')}>
-                        Contraseña
-                    </Text>
-                    <TextInput
-                        style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-2 my-1 bg-white')]}
-                        placeholder="Password"
-                        secureTextEntry
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-                    <Text style={tailwind('text-10 font-bold text-left mb-0 text-white mt-2')}>
-                        Tipo de documento
-                    </Text>
-                    <Picker
-                        selectedValue={typeDocument}
-                        style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-2 my-1 bg-white')]}
-                        onValueChange={(itemValue) => setTypeDocument(itemValue)}
-                    >
-                        {typeDocumentOptions.map((option: any) => (
-                            <Picker.Item key={option.value} label={option.label} value={option.value} />
-                        ))}
-                    </Picker>
-                    <Text style={tailwind('text-10 font-bold text-left mb-0 text-white mt-2')}>
-                        Documento
-                    </Text>
-                    <TextInput
-                        style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-2 my-1 bg-white')]}
-                        placeholder="Número de documento"
-                        value={documentNumber}
-                        onChangeText={setDocumentNumber}
-                    />
-                    <Text style={tailwind('text-10 font-bold text-left mb-0 text-white mt-2')}>
-                        Correo electrónico
-                    </Text>
-                    <TextInput
-                        style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-2 my-1 bg-white')]}
-                        placeholder="email@host.com"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-
-                    <Text style={tailwind('text-10 font-bold text-left mb-1 text-white mt-2')}>
-                        Rol de usuario
-                    </Text>
-                    <Picker
-                        selectedValue={role}
-                        style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-2 my-1 bg-white')]}
-                        onValueChange={(itemValue) => setRole(itemValue)}
-                    >
-                        {roleOptions?.map((option: any) => (
-                            <Picker.Item key={option._id} label={option.name} value={option._id} />
-                        ))}
-                    </Picker>
-                    <Text style={tailwind('text-10 font-bold text-left mb-0 text-white mt-2')}>
-                        Institución educativa
-                    </Text>
-                    <Picker
-                        selectedValue={hightSchool}
-                        style={[styles.input, tailwind('w-full px-3 py-4 border border-gray-300 rounded-md mb-4 my-1 bg-white')]}
-                        onValueChange={(itemValue: any) => {
-                            console.log('itemValue: ', itemValue);
-                            setHightSchool(itemValue);
-                        }}
-                        mode="dropdown"
-                    >
-                        {hightSchoolOptions.map((option: any) => (
-                            <Picker.Item key={option._id} label={option.name} value={option._id} />
-                        ))}
-                    </Picker>
-                    {hightSchool !== '0' && <>
-                        <Text style={tailwind('text-10 font-bold text-left mb-0 text-white mt-2')}>
-                            Curso
-                        </Text>
-                        <Picker
-                            selectedValue={course}
-                            style={[styles.input, tailwind('w-full px-3 py-2 border border-gray-300 rounded-md mb-4 my-2 bg-white')]}
-                            onValueChange={(itemValue) => setCourse(itemValue)}
+                    <View style={styles.headerContainer}>
+                        <LinearGradient
+                            colors={['#0066FF', '#00CCFF']}
+                            start={{ x: 0, y: 0 }}
+                            end={{ x: 1, y: 0 }}
+                            style={styles.headerGradient}
                         >
-                            {courseOptions.map((option: any) => (
-                                <Picker.Item key={option._id} label={option.name} value={option._id} />
-                            ))}
-                        </Picker>
-                    </>}
-                    <View style={tailwind('flex-row justify-between items-center mt-4 w-full')}>
+                            <MaterialIcons name="person-add" size={36} color="white" style={styles.headerIcon} />
+                            <Text style={styles.headerTitle}>Registro de usuario</Text>
+                        </LinearGradient>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>
+                            Nombre de usuario
+                        </Text>
+                        <View style={styles.inputWrapper}>
+                            <MaterialIcons name="person" size={22} color="#0066FF" style={styles.inputIcon} />
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder="Username"
+                                value={username}
+                                onChangeText={setUsername}
+                                placeholderTextColor="#999"
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>
+                            Contraseña
+                        </Text>
+                        <View style={styles.inputWrapper}>
+                            <MaterialIcons name="lock" size={22} color="#0066FF" style={styles.inputIcon} />
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder="Password"
+                                secureTextEntry
+                                value={password}
+                                onChangeText={setPassword}
+                                placeholderTextColor="#999"
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>
+                            Tipo de documento
+                        </Text>
+                        <View style={styles.inputWrapper}>
+                            <MaterialIcons name="description" size={22} color="#0066FF" style={styles.inputIcon} />
+                            <Picker
+                                selectedValue={typeDocument}
+                                style={styles.picker}
+                                onValueChange={(itemValue) => setTypeDocument(itemValue)}
+                                dropdownIconColor="#0066FF"
+                            >
+                                {typeDocumentOptions.map((option: any) => (
+                                    <Picker.Item key={option.value} label={option.label} value={option.value} />
+                                ))}
+                            </Picker>
+                        </View>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>
+                            Documento
+                        </Text>
+                        <View style={styles.inputWrapper}>
+                            <MaterialIcons name="credit-card" size={22} color="#0066FF" style={styles.inputIcon} />
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder="Número de documento"
+                                value={documentNumber}
+                                onChangeText={setDocumentNumber}
+                                placeholderTextColor="#999"
+                                keyboardType="numeric"
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>
+                            Correo electrónico
+                        </Text>
+                        <View style={styles.inputWrapper}>
+                            <MaterialIcons name="email" size={22} color="#0066FF" style={styles.inputIcon} />
+                            <TextInput
+                                style={styles.textInput}
+                                placeholder="email@host.com"
+                                value={email}
+                                onChangeText={setEmail}
+                                placeholderTextColor="#999"
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                        </View>
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>
+                            Rol de usuario
+                        </Text>
+                        <View style={styles.inputWrapper}>
+                            <MaterialIcons name="assignment-ind" size={22} color="#0066FF" style={styles.inputIcon} />
+                            <Picker
+                                selectedValue={role}
+                                style={styles.picker}
+                                onValueChange={(itemValue) => setRole(itemValue)}
+                                dropdownIconColor="#0066FF"
+                            >
+                                {roleOptions?.map((option: any) => (
+                                    <Picker.Item key={option._id} label={option.name} value={option._id} />
+                                ))}
+                            </Picker>
+                        </View>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.inputLabel}>
+                            Institución educativa
+                        </Text>
+                        <View style={styles.inputWrapper}>
+                            <MaterialIcons name="school" size={22} color="#0066FF" style={styles.inputIcon} />
+                            <Picker
+                                selectedValue={hightSchool}
+                                style={styles.picker}
+                                onValueChange={(itemValue: any) => {
+                                    console.log('itemValue: ', itemValue);
+                                    setHightSchool(itemValue);
+                                }}
+                                mode="dropdown"
+                                dropdownIconColor="#0066FF"
+                            >
+                                {hightSchoolOptions.map((option: any) => (
+                                    <Picker.Item key={option._id} label={option.name} value={option._id} />
+                                ))}
+                            </Picker>
+                            {hightSchool !== '0' && <>
+                                <View style={styles.inputContainer}>
+                                    <Text style={styles.inputLabel}>
+                                        Curso
+                                    </Text>
+                                    <View style={styles.inputWrapper}>
+                                        <MaterialIcons name="class" size={22} color="#0066FF" style={styles.inputIcon} />
+                                        <Picker
+                                            selectedValue={course}
+                                            style={styles.picker}
+                                            onValueChange={(itemValue) => setCourse(itemValue)}
+                                            dropdownIconColor="#0066FF"
+                                        >
+                                            {courseOptions.map((option: any) => (
+                                                <Picker.Item key={option._id} label={option.name} value={option._id} />
+                                            ))}
+                                        </Picker>
+                                    </View>
+                                </View>
+                            </>}
+                        </View>
+                    </View>
+                    <View style={styles.buttonContainer}>
                         <CustomButton
                             neonEffect={true}
                             icon="cancel"
                             variantColor='gray'
                             title={loading ? 'Cargando...' : 'Cancelar'}
                             disabled={loading}
-                            style={[{}, tailwind("text-xl text-white")]}
+                            buttonType='iconTop'
+                            iconSize={32}
+                            style={[{ flex: 1 }, tailwind("text-xl text-white")]}
                             onPress={handleCancel}
                         />
                         <CustomButton
                             neonEffect={true}
-                            icon="link"
+                            icon="person-add"
                             variantColor='blue'
                             title={loading ? 'Cargando...' : 'Generar usuario'}
                             disabled={loading}
-                            style={[{}, tailwind("text-xl text-white")]}
+                            buttonType='iconTop'
+                            iconSize={32}
+                            style={[{ flex: 1 }, tailwind("text-xl text-white")]}
                             onPress={handleRegister}
                         />
                     </View>
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider>
-    );
+    )
 };
 
 const styles = StyleSheet.create({
@@ -231,13 +292,70 @@ const styles = StyleSheet.create({
     scrollView: {
         padding: 20,
     },
-    input: {
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 12,
-        paddingHorizontal: 8,
+    headerContainer: {
+        marginBottom: 24,
+        borderRadius: 15,
+        overflow: 'hidden',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    headerGradient: {
+        flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+        borderRadius: 15,
+    },
+    headerIcon: {
+        marginRight: 10,
+    },
+    headerTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    inputContainer: {
+        marginBottom: 16,
+    },
+    inputLabel: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
+        marginBottom: 8,
+    },
+    inputWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#0066FF',
+        overflow: 'hidden',
+        height: 50,
+    },
+    inputIcon: {
+        paddingHorizontal: 10,
+    },
+    textInput: {
+        flex: 1,
+        height: 50,
+        paddingHorizontal: 8,
+        color: '#333',
+    },
+    picker: {
+        flex: 1,
+        height: 50,
+        color: '#333',
+        width: '80%',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 24,
+        marginBottom: 16,
     },
 });
 

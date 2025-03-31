@@ -1,44 +1,31 @@
 import useAuth from '@/shared/hooks/useAuth';
-import { Animated, ScrollView, StyleSheet } from 'react-native';
-//import { useTailwind } from 'tailwind-rn';
-import { useEffect, useRef, useState } from 'react';
+import { ScrollView, StyleSheet, View, Text } from 'react-native';
 import { useTailwind } from 'tailwind-rn';
 import CardComponent from '../../shared/components/ui/CardComponent';
-import ProgressBarVibra from '../../shared/components/ui/ProgressBar';
 import CustomButton from '../../shared/components/ui/CustomButton';
-import FloatButton from '../../shared/components/ui/animation/FloatButton';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import ActivityHistoryList from '../activity/screens/ActivityHistoryList';
 
 export default function TabOne() {
     const tailwind = useTailwind();
     const { logout } = useAuth();
-    const [animate, setAnimate] = useState(false);
-    const animation = useRef(new Animated.Value(0)).current;
-
-    useEffect(() => {
-        if (animate) {
-            Animated.timing(animation, {
-                toValue: 1, // Valor final de la animación
-                duration: 500, // Duración en milisegundos
-                useNativeDriver: true, // Importante para rendimiento
-            }).start(() => setAnimate(false)); // Reset al finalizar
-        } else {
-            Animated.timing(animation, {
-                toValue: 0, // Regresa al valor inicial
-                duration: 500,
-                useNativeDriver: true,
-            }).start();
-        }
-    }, [animate, animation]);
-
-    const escala = animation.interpolate({
-        inputRange: [0, 1],
-        outputRange: [1, 1.8], // Escala de 1 a 1.5
-    });
+    const router = useRouter();
+    const [historyActivate, setHistoryActivate] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     return (
 
         <ScrollView style={[styles.scrollView, tailwind('bg-gray-50 p-4')]}>
-            <CardComponent />
+            {!historyActivate && <>
+                <CardComponent />
+            </>}
+            {historyActivate && <>
+                <Text style={tailwind('mb-3 font-normal text-lg text-gray-500 dark:text-gray-400 p-4')}>
+                    Tu historial de emociones.
+                </Text>
+                <ActivityHistoryList />
+            </>}
             {/*
             <FloatButton />
             <WelcomeScreen navigation={undefined} />
@@ -52,6 +39,73 @@ export default function TabOne() {
                     </TouchableOpacity>
                 </View>
             </View>*/}
+            <View style={tailwind('flex-row justify-between items-center mt-6 w-full px-2')}>
+                <View style={tailwind('flex-1 mx-1 py-10')}>
+                    <CustomButton
+                        neonEffect={true}
+                        title={loading ? 'Cargando...' : 'Actividad diaria'}
+                        variantColor='blue'
+                        onPress={() => {
+                            router.push("/features/activity/screens/emotion");
+                        }}
+                        icon='play-arrow'
+                        disabled={loading}
+                        buttonType='iconTop'
+                        iconSize={24}
+                        fullWidth={true}
+                        style={tailwind('text-xl text-white h-60')}
+                    />
+                </View>
+                {!historyActivate && <>
+                    <View style={tailwind('flex-1 mx-1 py-10')}>
+                        <CustomButton
+                            neonEffect={true}
+                            title={loading ? 'Cargando...' : 'Historial'}
+                            variantColor='green'
+                            onPress={() => {
+                                setHistoryActivate(true);
+                            }}
+                            icon='history'
+                            disabled={loading}
+                            buttonType='iconTop'
+                            iconSize={24}
+                            fullWidth={true}
+                            style={tailwind('text-xl text-white h-60')}
+                        />
+                    </View>
+                </>}
+                {historyActivate && <>
+                    <View style={tailwind('flex-1 mx-1 py-10')}>
+                        <CustomButton
+                            neonEffect={true}
+                            title={loading ? 'Cargando...' : 'Inicio'}
+                            variantColor='purple'
+                            onPress={() => {
+                                setHistoryActivate(false);
+                            }}
+                            icon='home'
+                            disabled={loading}
+                            buttonType='iconTop'
+                            iconSize={24}
+                            fullWidth={true}
+                            style={tailwind('text-xl text-white h-60')}
+                        />
+                    </View>
+                </>}
+                <View style={tailwind('flex-1 mx-1 py-10')}>
+                    <CustomButton
+                        neonEffect={true}
+                        title='Cerrar sesión'
+                        variantColor='red'
+                        onPress={logout}
+                        icon='exit-to-app'
+                        buttonType='iconTop'
+                        iconSize={24}
+                        fullWidth={true}
+                        style={tailwind('text-xl text-white h-60')}
+                    />
+                </View>
+            </View>
         </ScrollView>
     );
 }

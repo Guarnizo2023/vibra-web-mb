@@ -1,15 +1,13 @@
 import useUser from '@/context/UserContext';
 import api from '@/shared/services/api/api';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Button, List } from "react-native-paper";
+import { ActivityIndicator, FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn";
 import CustomButton from "../../shared/components/ui/CustomButton";
-import { MaterialIcons } from '@expo/vector-icons';
 
+const logoUnad = require('../../assets/sponsors/logo_unad.png');
 const TESTS = [
     { id: "1", title: "Test de personalidad", description: "Test de ... ", started: true },
     { id: "2", title: "Test de tecnologia", description: "Test de conocimientos tecnológicos", started: false },
@@ -77,54 +75,70 @@ const TestListScreen = () => {
                         <Text style={tailwind('mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white')}>
                             Tests para Vibra
                         </Text>
+                        <Image
+                            source={logoUnad}
+                            style={{ marginLeft: 200, width: 100, height: 56, marginTop: Platform.OS == 'android' ? 0 : -46 }}
+                        />
                     </TouchableOpacity>
-                    <Text style={tailwind('mb-3 font-normal text-lg')}>
+                    <Text style={tailwind('mb-3 font-normal text-lg mt-4')}>
                         Muestra tu vibra inicial a traves de estos sencillos test de emotividad.
                     </Text>
                     <TouchableOpacity
                         style={tailwind('inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800')}
                     >
                         <Text style={tailwind('text-white')}>Leer mas acerca de los test en vibra</Text>
-                        {/*<Image
-                            source={require('../../assets/favicon.png')}
-                            style={tailwind('w-3.5 h-3.5 ms-2 rtl:rotate-180')}
-                        />*/}
                     </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.listContainer}>
                 <FlatList
                     data={testList}
-                    style={tailwind('max-w-full mx-2 my-6 rounded-lg')}
+                    style={tailwind('max-w-full mx-2 rounded-lg')}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <List.Item
-                            style={{ marginInline: 26, marginBottom: 6, padding: 4, backgroundColor: "#f0f0f0", borderRadius: 8 }}
-                            title={item.title}
-                            left={props => <MaterialIcons {...props} name="arrow-forward-ios" size={16} color="#007AFF" style={{ marginLeft: 10, top: 11 }} />}
-                            right={() => (<>
-                                {!item.started && <Button mode="contained"
-                                    style={{ backgroundColor: "#007AFF", paddingTop: 2, borderRadius: 8, alignItems: 'center', justifyContent: 'center', height: 42, width: 80 }}
-                                    onPress={() => router.push({
-                                        pathname: "/features/test/TestModalScreen",
-                                        params: { testId: item.id }
-                                    })}>
-                                    <Ionicons style={{ paddingTop: 10 }} name="play-circle-outline" size={24} color="white" />
-                                </Button>}
-                                {item.started &&
-                                    <Button mode="contained"
-                                        style={{ backgroundColor: "green", paddingTop: 2, borderRadius: 8, alignItems: 'center', justifyContent: 'center', height: 42, width: 80 }}
-                                        onPress={() => router.push({
-                                            pathname: "/features/test/TestResultsListScreen",
-                                            params: { testId: item.id }
-                                        })}>
-                                        <FontAwesome style={{ paddingTop: 10 }} name="check-square-o" size={24} color="white" />
-                                    </Button>
-                                }
-                            </>
-                            )}
-                        />
+                        <View style={styles.cardContainer}>
+                            <View style={styles.card}>
+                                <View style={styles.cardContent}>
+                                    <MaterialIcons name="school" size={24} color="#007AFF" style={styles.cardIcon} />
+                                    <View style={styles.cardTextContainer}>
+                                        <Text style={styles.cardTitle}>{item.title}</Text>
+                                        <Text style={styles.cardDescription}>{item.description}</Text>
+                                    </View>
+                                    <View style={styles.cardButtonContainer}>
+                                        {!item.started &&
+                                            <CustomButton
+                                                title="Iniciar"
+                                                icon="play-circle-outline"
+                                                iconPosition="left"
+                                                variantColor="blue"
+                                                neonEffect={true}
+                                                style={styles.actionButton}
+                                                onPress={() => router.push({
+                                                    pathname: "/features/test/TestModalScreen",
+                                                    params: { testId: item.id }
+                                                })}
+                                            />
+                                        }
+                                        {item.started &&
+                                            <CustomButton
+                                                title="Ver"
+                                                icon="check-circle"
+                                                iconPosition="left"
+                                                variantColor="green"
+                                                neonEffect={true}
+                                                style={styles.actionButton}
+                                                onPress={() => router.push({
+                                                    pathname: "/features/test/TestResultsListScreen",
+                                                    params: { testId: item.id }
+                                                })}
+                                            />
+                                        }
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
                     )}
+                    showsVerticalScrollIndicator={false}
                 />
             </View>
             <View style={styles.buttonContainer}>
@@ -150,10 +164,11 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         paddingVertical: 10,
-        elevation: 4,
+        borderRadius: 15,
+        marginBottom: 10,
     },
     header: {
-        color: 'white',
+        color: '#333',
         fontSize: 20,
         marginTop: 10,
         fontWeight: 'bold',
@@ -161,15 +176,66 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         flex: 1,
+        paddingHorizontal: 4,
+        top: -30,
     },
     listContent: {
         padding: 16,
     },
+    cardContainer: {
+        marginHorizontal: 6,
+        marginVertical: 6,
+        borderRadius: 10,
+        overflow: 'hidden',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+        marginRight: 20,
+    },
     card: {
-        marginBottom: 12,
-        borderRadius: 12,
-        elevation: 2,
+        marginBottom: 0,
+        borderRadius: 16,
         backgroundColor: 'white',
+        overflow: 'hidden',
+    },
+    cardContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+    },
+    cardIcon: {
+        marginRight: 16,
+        backgroundColor: 'rgba(0, 122, 255, 0.1)',
+        padding: 10,
+        borderRadius: 12,
+    },
+    cardTextContainer: {
+        flex: 1,
+        marginRight: 8,
+    },
+    cardTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 4,
+    },
+    cardDescription: {
+        fontSize: 14,
+        color: '#666',
+    },
+    cardButtonContainer: {
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        right: -10,
+    },
+    actionButton: {
+        minWidth: 90,
+        right: 10,
+        height: 40,
+        verticalAlign: 'middle',
+        top: Platform.OS === 'android' ? 14 : 0,
     },
     itemTitle: {
         fontSize: 16,
@@ -188,7 +254,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         padding: 16,
         maxHeight: 100,
-        elevation: 4,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
 });
 
